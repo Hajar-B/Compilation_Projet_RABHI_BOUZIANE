@@ -8,28 +8,28 @@
 	int yyerror(const char*);/* same for bison */
 %}
 
+
 %token NOMBRE PT_VIRG
-%start resultat/* axiom */
+
+%left '+' '-'
+%left '*'
+%nonassoc MOINSU
+
 
 %%
 
 resultat: expression PT_VIRG;
 
 expression:
-	expression'+'terme
-	| expression'-'terme
-	| terme
-	;
-
-terme:terme'*'facteur
-	| facteur
-	;
-	
-facteur:'('expression')'
-	|'-'facteur
+	 expression'+'expression
+	|expression'-'expression
+	|expression'*'expression
+	|'('expression')'
+	|'-'expression %prec MOINSU
 	| NOMBRE
 	;
 %%
 
 #include <stdio.h>        /* printf */
-int yyerror(const char *msg){ printf("Parsing:: syntax error\n"); return 1;}int yywrap(void){ return 1; }/* stop reading flux yyin */
+int yyerror(const char *msg){ printf("Parsing:: syntax error\n"); return 1;}
+int yywrap(void){ return 1; }/* stop reading flux yyin */
