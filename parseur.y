@@ -9,7 +9,7 @@
 %}
 
 
-%token NOMBRE PT_VIRG
+%token NOMBRE PT_VIRG FLOAT
 
 %left '+' '-'
 %left '*'
@@ -27,6 +27,7 @@ expression:
 	|'('expression')'
 	|'-'expression %prec MOINSU
 	| NOMBRE
+	| FLOAT
 	;
 %%
 

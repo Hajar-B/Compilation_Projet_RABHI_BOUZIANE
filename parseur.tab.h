@@ -51,7 +51,8 @@ extern int yydebug;
   {
     NOMBRE = 258,
     PT_VIRG = 259,
-    MOINSU = 260
+    FLOAT = 260,
+    MOINSU = 261
   };
 #endif
 
