@@ -50,7 +50,8 @@ extern int yydebug;
   enum yytokentype
   {
     NOMBRE = 258,
-    MOINSU = 259
+    PT_VIRG = 259,
+    MOINSU = 260
   };
 #endif
 
@@ -63,7 +64,7 @@ union YYSTYPE
   struct _tree* exp;
   int num;
 
-#line 67 "parseur.tab.h"
+#line 68 "parseur.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
