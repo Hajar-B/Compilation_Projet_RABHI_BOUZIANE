@@ -51,7 +51,8 @@ extern int yydebug;
   {
     NOMBRE = 258,
     PT_VIRG = 259,
-    MOINSU = 260
+    FLOAT = 260,
+    MOINSU = 261
   };
 #endif
 
@@ -63,8 +64,9 @@ union YYSTYPE
 
   struct _tree* exp;
   int num;
+  double numf;
 
-#line 68 "parseur.tab.h"
+#line 70 "parseur.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

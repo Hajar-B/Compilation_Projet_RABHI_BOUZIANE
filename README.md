@@ -62,3 +62,55 @@ Pour exécuter, deux possibilités s'offrent à vous :
 ./main
 (puis saisir sur le terminal une expression à parser)
 
+
+
+# Frangment 0.1
+
+Réalisé par : RABHI Sohayla
+
+## Description 
+
+1. **lexeur.l** : 
+- le fichier *parseur.tab.h* est inclu car il définit le nouveau token FLOAT 
+- une expression régulière associé à ce token a été ajouté
+
+2. **parseur.y** :
+- on définit 1 nouveau token : FLOAT
+- on définit les règles de priorité : '*' et '/' sont prioritaire sur '+' et '-' car ils sont définis après le '+' et le '-'.
+- par conséquent, on a mis à jour la grammaire
+
+
+3. **test.txt**:
+- fichier qui contient une expression JS à parser.
+- on a tester les expressions suivantes: 
+
+.;        	=> error
+
+3.2       	=> error
+
+.1;	  	=> error
+
+3+(.2);  	=> error
+
+/	 	=> error
+
+3/;      	=> error
+
+3.2;     	=> OK
+
+3.;      	=> OK
+
+2.5*34;  	=> OK
+
+12.+2;	 	=> OK
+
+3./(34--4);	=> OK
+
+2.5/5; 	=> OK
+
+5/(3*2); 	=> OK
+
+1.2/2+6-7; 	=> OK
+
+
+
