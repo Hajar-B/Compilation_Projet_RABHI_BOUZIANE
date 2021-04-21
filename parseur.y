@@ -13,9 +13,10 @@
 	int yyerror(const char*);/* same for bison */
 %}
 
-%token <ival> NOMBRE 
+%token <ival>NOMBRE PT_VIRG <dval>FLOAT
 
-%type <ival> expression
+%type <dval> expression
+
 
 %left '+' '-'
 %left '*' '/'
@@ -28,7 +29,7 @@
 
 %%
 
-resultat: expression  { printf("Resultat= %d\n",$1); } ;
+resultat: expression PT_VIRG { printf("Resultat= %f\n",$1); } ;
 
 expression:
 	 expression'+'expression {$$=$1+$3; }
@@ -38,8 +39,10 @@ expression:
 	|'('expression')' {$$= $2; }
 	|'-'expression %prec MOINSU {$$= -$2; }
 	| NOMBRE {$$=$1; }
+	| FLOAT {$$=$1; }
 	;
 %%
 
 #include <stdio.h>        /* printf */
-int yyerror(const char *msg){ printf("Parsing:: syntax error\n"); return 1;}int yywrap(void){ return 1; }/* stop reading flux yyin */
+int yyerror(const char *msg){ printf("Parsing:: syntax error\n"); return 1;}
+int yywrap(void){ return 1; }/* stop reading flux yyin */

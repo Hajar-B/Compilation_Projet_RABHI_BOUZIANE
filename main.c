@@ -7,10 +7,31 @@
 #include <stdlib.h>        /* exit */
 #include "parseur.tab.h"
 
-int main(void){
-	if (yyparse()==0) {	/* yyparse calls yylex */
-		printf("\nParsing:: syntax OK\n");/* reached if parsing folllows the grammar */
+extern FILE* yyin;
+extern int yy_scan_string(const char *);
+
+int main(int argc, char *argv[]){
+  FILE* tmp;
+  //tmp = fopen(argv[1],"r+");
+  if( argc == 2){
+	  if((tmp = fopen(argv[1],"r")) != NULL){
+		  yyin = tmp;
+		 
+	  }
+	  yyparse();
+	  printf("Parsing:: syntax OK\n"); /* reached if parsing folllows the grammar */
+	  fclose(tmp);
+   }
+   else{
+   	printf("Entrez votre expression : ");
+   	char buff[50];
+   	scanf("%s", buff);
+   	yy_scan_string(buff);
+   	
+   	if (yyparse()==0) { /* yyparse calls yylex */
+		  printf("\nParsing:: syntax OK\n"); /* reached if parsing folllows the grammar */
+		  
 	}
-	
-	exit(EXIT_SUCCESS);
+   }
+  exit(EXIT_SUCCESS);
 }

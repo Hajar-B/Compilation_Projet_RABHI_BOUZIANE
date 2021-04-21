@@ -50,7 +50,9 @@ extern int yydebug;
   enum yytokentype
   {
     NOMBRE = 258,
-    MOINSU = 259
+    PT_VIRG = 259,
+    FLOAT = 260,
+    MOINSU = 261
   };
 #endif
 
@@ -58,12 +60,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 24 "parseur.y"
+#line 25 "parseur.y"
 
 	double dval;
 	int ival; 
 
-#line 67 "parseur.tab.h"
+#line 69 "parseur.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
