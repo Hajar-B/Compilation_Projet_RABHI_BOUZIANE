@@ -8,7 +8,8 @@
 
 %%
 
-0|[1-9][0-9]*  { printf("lex::NOMBRE %s\n",yytext); return NOMBRE; }
+0|[1-9][0-9]* { printf("lex::NOMBRE %s\n",yytext); yylval.ival=atoi(yytext); return NOMBRE; }
+
 [\t\n]         { ; }/* ignore space, tab, and line return */
 .              { printf("lex::char %s\n",yytext); return yytext[0]; } /* other one-char = token, ex.'+'*/
 
