@@ -10,6 +10,7 @@
 
 0|[1-9][0-9]*  { printf("lex::NOMBRE %s\n",yytext); yylval.num=atoi(yytext); return NOMBRE; }
 ;		{ printf("lex::PT_VIRG %s\n",yytext); return PT_VIRG; }
+0|[1-9][0-9]*"."[0-9]* { printf("lex::FLOAT %s\n",yytext);  yylval.numf=atof(yytext); return FLOAT; }
 [\t\n]         { ; }/* ignore space, tab, and line return */
 .              { printf("lex::char %s\n",yytext); return yytext[0]; } /* other one-char = token, ex.'+'*/
 
