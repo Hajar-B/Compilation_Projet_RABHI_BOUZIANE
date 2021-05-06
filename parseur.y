@@ -13,6 +13,7 @@
  int yyerror(struct _tree**, const char*); /* same for bison */
 %}
 
+
 %parse-param {struct _tree* *pT} // yyparse(&t) call => *pT = *(&t) = t 
 
 %union {
@@ -21,7 +22,7 @@
 } ;
 
 %type  <exp> expression
-%token <num> NOMBRE
+%token <num> NOMBRE PT_VIRG
 
 %left '+' '-'
 %left '*' '/'
@@ -29,7 +30,7 @@
 
 %%
 
-resultat:   expression		{ *pT = $1; };
+resultat:   expression	PT_VIRG	{ *pT = $1; };
 
 expression: 
     expression '+' expression	{ $$ = newBinaryAST('+',$1,$3); }
@@ -46,4 +47,3 @@ expression:
 #include <stdio.h>	/* printf */
 int yyerror(struct _tree **pT, const char *msg){ printf("Parsing:: syntax error\n"); return 1;}
 int yywrap(void){ return 1; } /* stop reading flux yyin */
-
