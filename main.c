@@ -6,11 +6,20 @@
 #include <stdio.h>        /* printf */
 #include <stdlib.h>        /* exit */
 #include "parseur.tab.h"
+#include "AST.c"	/* AST fonctions */
 
-int main(void){
-	if (yyparse()==0) {	/* yyparse calls yylex */
-		printf("\nParsing:: syntax OK\n");/* reached if parsing folllows the grammar */
-	}
-	
-	exit(EXIT_SUCCESS);
+int main(void)
+{
+  AST t; 				/* &t allows to modifie the tree */
+  if ((yyparse(&t)==0)) { 		/* yyparse calls yylex */
+    printf("\nParsing:: syntax OK\n\n");/* reached if parsing folllows the grammar */
+    
+    /* print the obtained tree */
+    if (t->left!=NULL) printf("Root symbol:: %c\n", t->car);	/* check if car at root */
+    printAST(t); printf("\n");
+    		
+    freeAST(t);
+  } 
+  exit(EXIT_SUCCESS);
 }
+
