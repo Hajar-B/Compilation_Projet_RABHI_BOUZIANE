@@ -52,7 +52,12 @@ extern int yydebug;
     NOMBRE = 258,
     PT_VIRG = 259,
     FLOAT = 260,
-    MOINSU = 261
+    BOOLEAN = 261,
+    EQUALS = 262,
+    NOTEQL = 263,
+    GREQ = 264,
+    LOEQ = 265,
+    MOINSU = 266
   };
 #endif
 

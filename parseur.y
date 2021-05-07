@@ -4,8 +4,6 @@
 /* result: parseur.tab.h = def. of lexical units aka lexems */
 
 %{
-	#include <stdio.h>
-
 	int yylex(void);/* -Wall : avoid implicit call */
 	int yyerror(const char*);/* same for bison */
 %}
@@ -22,7 +20,6 @@
 
 %%
 
-/* faire des print pour vérifier les associativité et priorité */
 
 resultat: expression PT_VIRG;
 
@@ -46,6 +43,6 @@ expression:
 	;
 %%
 
-//#include <stdio.h>        /* printf */
+#include <stdio.h>        /* printf */
 int yyerror(const char *msg){ printf("Parsing:: syntax error\n"); return 1;}
 int yywrap(void){ return 1; }/* stop reading flux yyin */
