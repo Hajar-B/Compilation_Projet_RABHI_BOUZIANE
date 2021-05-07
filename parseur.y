@@ -19,10 +19,11 @@
 %union {
   struct _tree* exp;
   int num;
+  double numf;
 } ;
 
 %type  <exp> expression
-%token <num> NOMBRE PT_VIRG
+%token <num>NOMBRE PT_VIRG <numf>FLOAT
 
 %left '+' '-'
 %left '*' '/'
@@ -39,9 +40,10 @@ expression:
   | expression '/' expression	{ $$ = newBinaryAST('/',$1,$3); }
   | '(' expression ')'		{ $$ = $2; }
   | '-' expression %prec MOINSU	{ $$ = newUnaryAST('-',$2); }
-  | NOMBRE			{ $$ = newLeafAST($1); } 
+  | NOMBRE			{ $$ = newLeafAST($1); }
+  | FLOAT			{ $$ = newLeafAST($1); } 
   ;
-
+  
 %%
 
 #include <stdio.h>	/* printf */

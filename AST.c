@@ -21,7 +21,7 @@ AST newUnaryAST(char car, AST son)
 }
 
 /* create an AST leaf from a value */
-AST newLeafAST(int val)
+AST newLeafAST(double val)
 {
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
   if (t!=NULL){	/* malloc ok */
@@ -49,7 +49,7 @@ void printAST(AST t)
     printf("[ ");
     printAST(t->left);
     /* check if node is car|val */
-    if (t->left==NULL) printf(":%d: ",t->val); else printf(":%c: ",t->car);
+    if (t->left==NULL) printf(":%f: ",t->val); else printf(":%c: ",t->car);
     printAST(t->right);
     printf("] ");
   }
@@ -67,7 +67,7 @@ void codeExtension(AST t, char* file){
     	codeExtension(t->right,file);
     }
    
-    if(t->left == NULL) fprintf(fichier,"CsteNb %d \n",t->val); 
+    if(t->left == NULL) fprintf(fichier,"CsteNb %f \n",t->val); 
     else if (t->left != NULL && (t->right == NULL)) fprintf(fichier,"NegaNb \n");
     else {
     	switch(t->car){
@@ -77,6 +77,8 @@ void codeExtension(AST t, char* file){
 				fprintf(fichier, "MultNb\n"); break;
 			case '-' :
 				fprintf(fichier, "SubiNb\n"); break;
+			case '/' :
+				fprintf(fichier, "DiviNb\n"); break;
 			default : fprintf(fichier," "); break;
 		}	
     }
@@ -94,7 +96,7 @@ void code(AST t)
     	code(t->right);
     }
    
-    if(t->left == NULL) printf("CsteNb %d \n",t->val); 
+    if(t->left == NULL) printf("CsteNb %f \n",t->val); 
     else if (t->left != NULL && (t->right == NULL)) printf("NegaNb \n");
     else affichage(t->car);
 }
@@ -108,6 +110,8 @@ void affichage(char t){
 			printf("MultNb\n"); break;
 		case '-' :
 			printf("SubiNb\n"); break;
+		case '/' :
+			printf("DiviNb\n"); break;
 		default : printf(" "); break;
 	}	
 
