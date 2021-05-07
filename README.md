@@ -1,98 +1,108 @@
-# Frangment 0.1
-
-Réalisé par : RABHI Sohayla
-
-## Description 
-
-1. **lexeur.l** : 
-- le fichier *parseur.tab.h* est inclu car il définit le nouveau token FLOAT 
-- une expression régulière associé à ce token a été ajouté
-
-2. **parseur.y** :
-- on définit 1 nouveau token : FLOAT
-- on définit les règles de priorité : '*' et '/' sont prioritaire sur '+' et '-' car ils sont définis après le '+' et le '-'.
-- par conséquent, on a mis à jour la grammaire
-
-
-3. **test.txt**:
-- fichier qui contient une expression JS à parser.
-- on a tester les expressions suivantes: 
-
-.;        	=> error
-
-3.2       	=> error
-
-.1;	  	=> error
-
-3+(.2);  	=> error
-
-/	 	=> error
-
-3/;      	=> error
-
-3.2;     	=> OK
-
-3.;      	=> OK
-
-2.5*34;  	=> OK
-
-12.+2;	 	=> OK
-
-3./(34--4);	=> OK
-
-2.5/5; 	=> OK
-
-5/(3*2); 	=> OK
-
-1.2/2+6-7; 	=> OK
-
-
-
-# Frangment 0.0
+# Fragment p0.2
 
 Réalisé par : BOUZIANE Hajar
 
 ## Description 
 
 1. **lexeur.l** : 
-- le fichier *parseur.tab.h* est inclu car il permet de définir les tokens NUMBER et PT_VIRG
-- Pour chaque expression régulière, on renvoie le token qui lui est associé. La première expression régulière reconnaît un nombre tandis que la seconde reconnaît un point virgule.
+- le fichier *parseur.tab.h* est inclu car il permet de définir les token NOMBRE, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, PT_VIRG et FLOAT. 
+- une expression régulière associée à ce token a été ajoutée.
 
 2. **parseur.y** :
-- on définit 2 tokens : NUMBER et PT_VIRG
-- on définit les règles d'associativité gauche avec %left
-- on définit une balise MOINSU pour signifier qu'il a une autre priorité que le '-'
-- on définit les règles de priorité : '*' est prioritaire sur '+' et '-' car il est défini après le '+' et le '-'.
-- on définit la grammaire
+- on définit 8 tokens : NOMBRE, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, PT_VIRG et FLOAT. Notons que les opérations "==", "!=", "<=", ">=" sont des multisymboles d'où la création de leur token.
+- on définit les règles d'associativité gauche grâce au %left.
+- on définit les règles de priorités : les opérations booléennes (étant les moins prioritaires) sont définies en premier. S'en suit du '+' et du '-' car elles sont moins prioritaires que le '*' et le '/' (que l'on a donc défini dans un troisième temps). Et pour finir, comme le '!' est prioritaire sur toutes les précédentes opérations, il a été défini en dernier.
+- on définit une balise MOINSU pour sigifier qu'il a une autre priorité que le '-'.
+- par conséquent, on a mis à jour la grammaire sans oublier d'ajouter les opérations '<' et '>'.
 
-3. **main.c**:
-- programme exécutable qui va parser le contenu d'un fichier.
-- affiche un message indiquant si la synthaxe de ce contenu est correcte ou non.
 
-4. **test.txt**:
-- fichier qui contient une expression JS à parser.
-- on a tester les expressions suivantes: 
-;       => error
+3. **test.txt**:
 
-(3+3;); => error
+1+2==3;
+- AddiNb
+- Equals 
 
-3*(-3--2; => error
+=> ok
 
-3;      => OK
+(1+2)==3;
+- AddiNb
+- Equals 
 
-3+3;    => OK
+=> ok
 
-(3+3);  => OK
+1+(2==3); 
+- Equals
+- AddiNb 
 
--3;	=> OK
+=> ok
 
-(-3);	=> OK
+True+3!=5.123; 
+- AddiNb
+- NotEq 
 
-(-3--2); => OK
+=>ok
 
-(-3*2); => OK
+Fale<=33333/33; 
+- DiviNb
+- LoEq 
 
-(-3-2); => OK
+=> ok
+
+0-32<(7+7.000000);
+- SubiNb
+- AddiNb
+- Lo 
+
+=> ok
+
+True*(3>=43); 
+- GrEq
+- MultNb 
+
+=> ok
+
+True*(3>43);
+- Gr
+- MultNb
+
+=>ok
+
+!!True; 
+- Not
+- Not 
+
+=> ok
+
+True*34+1==False-!True; 
+- MultNb
+- AddiNB
+- Not
+- SubiNb
+- Equals 
+
+=> ok
+
+!(True==False); 
+- Equals
+- Not 
+
+=> ok
+
+True==!False;
+- Not
+- Equals 
+
+=> ok
+
+!!True<=-3.6!=21+4; 
+- Not
+- Not
+- Moinsu
+- LoEq
+- AddiNb
+- NoEq 
+
+=> ok
 
 ## Comment compiler et exécuter ?
 
