@@ -4,34 +4,48 @@
 /* result: parseur.tab.h = def. of lexical units aka lexems */
 
 %{
+	#include <stdio.h>
+
 	int yylex(void);/* -Wall : avoid implicit call */
 	int yyerror(const char*);/* same for bison */
 %}
 
 
-%token NOMBRE PT_VIRG FLOAT
+%token NOMBRE PT_VIRG FLOAT BOOLEAN EQUALS NOTEQL GREQ LOEQ
 
+%left EQUALS NOTEQL LOEQ '<' GREQ '>' 
 %left '+' '-'
 %left '*' '/'
+%left '!'
 %nonassoc MOINSU
 
 
 %%
 
+/* faire des print pour vérifier les associativité et priorité */
+
 resultat: expression PT_VIRG;
 
 expression:
-	 expression'+'expression
-	|expression'-'expression
-	|expression'*'expression
-	|expression'/'expression
+	 expression'+'expression {printf("AddiNb\n");}
+	|expression'-'expression {printf("SubiNb\n");}
+	|expression'*'expression {printf("MultNb\n");}
+	|expression'/'expression {printf("DiviNb\n");}
 	|'('expression')'
-	|'-'expression %prec MOINSU
-	| NOMBRE
+	|'-'expression %prec MOINSU   {printf("MOINSU\n");}
+	|expression EQUALS expression {printf("EQUALS\n");}
+	|expression NOTEQL expression {printf("NOTEQL\n");}
+	|expression GREQ expression   {printf("GREQ\n");}
+	|expression '>' expression    {printf("GR\n");}
+	|expression LOEQ expression   {printf("LOEQ\n");}
+	|expression '<' expression    {printf("LO\n");}
+	|'!'expression			{printf("NOT\n");}
+	| NOMBRE 
 	| FLOAT
+	| BOOLEAN
 	;
 %%
 
-#include <stdio.h>        /* printf */
+//#include <stdio.h>        /* printf */
 int yyerror(const char *msg){ printf("Parsing:: syntax error\n"); return 1;}
 int yywrap(void){ return 1; }/* stop reading flux yyin */
