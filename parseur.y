@@ -34,12 +34,12 @@ expression:
 	|'('expression')'
 	|'-'expression %prec MOINSU   {printf("Moinsu\n");}
 	|expression EQUALS expression {printf("Equals\n");}
-	|expression NOTEQL expression {printf("NotEq");}
-	|expression GREQ expression   {printf("GrEq");}
-	|expression '>' expression    {printf("Gr");}
-	|expression LOEQ expression   {printf("LoEq");}
-	|expression '<' expression    {printf("Lo");}
-	|'!'expression		       {printf("Not");}
+	|expression NOTEQL expression {printf("NotEq\n");}
+	|expression GREQ expression   {printf("GrEq\n");}
+	|expression '>' expression    {printf("Gr\n");}
+	|expression LOEQ expression   {printf("LoEq\n");}
+	|expression '<' expression    {printf("Lo\n");}
+	|'!'expression		       {printf("Not\n");}
 	| NOMBRE 
 	| FLOAT
 	| BOOLEAN

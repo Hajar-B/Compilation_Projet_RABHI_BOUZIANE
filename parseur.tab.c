@@ -1358,37 +1358,37 @@ yyreduce:
 
   case 10:
 #line 37 "parseur.y"
-                                      {printf("NotEq");}
+                                      {printf("NotEq\n");}
 #line 1363 "parseur.tab.c"
     break;
 
   case 11:
 #line 38 "parseur.y"
-                                      {printf("GrEq");}
+                                      {printf("GrEq\n");}
 #line 1369 "parseur.tab.c"
     break;
 
   case 12:
 #line 39 "parseur.y"
-                                      {printf("Gr");}
+                                      {printf("Gr\n");}
 #line 1375 "parseur.tab.c"
     break;
 
   case 13:
 #line 40 "parseur.y"
-                                      {printf("LoEq");}
+                                      {printf("LoEq\n");}
 #line 1381 "parseur.tab.c"
     break;
 
   case 14:
 #line 41 "parseur.y"
-                                      {printf("Lo");}
+                                      {printf("Lo\n");}
 #line 1387 "parseur.tab.c"
     break;
 
   case 15:
 #line 42 "parseur.y"
-                                       {printf("Not");}
+                                       {printf("Not\n");}
 #line 1393 "parseur.tab.c"
     break;
 
