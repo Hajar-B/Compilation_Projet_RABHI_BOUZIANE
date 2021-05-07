@@ -7,6 +7,7 @@
 #include <stdlib.h>        /* exit */
 #include "parseur.tab.h"
 #include "AST.c"	/* AST fonctions */
+#include <string.h>
 
 extern FILE* yyin;
 extern int yy_scan_string(const char *);
@@ -15,6 +16,7 @@ int main(int argc, char *argv[]){
   FILE* tmp;
   AST t; 				/* &t allows to modifie the tree */
   //tmp = fopen(argv[1],"r+");
+  
   if( argc == 2){
 	  if((tmp = fopen(argv[1],"r")) != NULL){
 		  yyin = tmp;
@@ -26,7 +28,14 @@ int main(int argc, char *argv[]){
 	    /* print the obtained tree */
 	    if (t->left!=NULL) printf("Root symbol:: %c\n", t->car);	/* check if car at root */
 	    printAST(t); printf("\n");
-	    		
+	    
+	    
+	    char* nomFichier = strtok(argv[1],"."); 
+	    char* nomExtension = strcat(nomFichier,".jsm");
+	    printf("%s\n",nomExtension);
+	    remove(nomExtension);
+	    codeExtension(t, nomExtension); printf("\n");
+	    
     	    freeAST(t);
     	  }
 	  fclose(tmp);
@@ -43,7 +52,7 @@ int main(int argc, char *argv[]){
 	    /* print the obtained tree */
 	    if (t->left!=NULL) printf("Root symbol:: %c\n", t->car);	/* check if car at root */
 	    printAST(t); printf("\n");
-	    		
+	    code(t); printf("\n");	
 	    freeAST(t);
 	}
    }

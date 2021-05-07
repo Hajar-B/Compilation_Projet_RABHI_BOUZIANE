@@ -23,6 +23,15 @@ AST newLeafAST(int val);
 /* delete an AST */
 void freeAST(AST t);
 
+/* affichage du code assembleur dans un fichier .jsm */
+void codeExtension(AST t, char* file);
+
+/* print postfix */
+void code(AST t);
+
+/* affichage du code assembleur */
+void affichage(char t);
+
 /* print an AST*/
 void printAST(AST t);
 

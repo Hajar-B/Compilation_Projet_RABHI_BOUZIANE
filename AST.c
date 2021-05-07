@@ -55,3 +55,61 @@ void printAST(AST t)
   }
 }
 
+
+void codeExtension(AST t, char* file){
+	FILE* fichier = NULL;
+	fichier = fopen(file,"a+");
+
+    if (t->left!=NULL){ 
+    	codeExtension(t->left,file); 
+    }
+    if (t->right!=NULL){ 
+    	codeExtension(t->right,file);
+    }
+   
+    if(t->left == NULL) fprintf(fichier,"CsteNb %d \n",t->val); 
+    else if (t->left != NULL && (t->right == NULL)) fprintf(fichier,"NegaNb \n");
+    else {
+    	switch(t->car){
+			case '+' :
+				fprintf(fichier, "AddiNb\n"); break;
+			case '*' :
+				fprintf(fichier, "MultNb\n"); break;
+			case '-' :
+				fprintf(fichier, "SubiNb\n"); break;
+			default : fprintf(fichier," "); break;
+		}	
+    }
+	fclose(fichier);
+}
+
+
+/* postfix print an AST*/  
+void code(AST t)
+{	
+    if (t->left!=NULL){ 
+    	code(t->left); 
+    }
+    if (t->right!=NULL){ 
+    	code(t->right);
+    }
+   
+    if(t->left == NULL) printf("CsteNb %d \n",t->val); 
+    else if (t->left != NULL && (t->right == NULL)) printf("NegaNb \n");
+    else affichage(t->car);
+}
+
+
+void affichage(char t){
+	switch(t){
+		case '+' :
+			printf("AddiNb\n"); break;
+		case '*' :
+			printf("MultNb\n"); break;
+		case '-' :
+			printf("SubiNb\n"); break;
+		default : printf(" "); break;
+	}	
+
+}
+
