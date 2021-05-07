@@ -33,10 +33,16 @@ int main(int argc, char *argv[]){
 	    char* nomFichier = strtok(argv[1],"."); 
 	    char* nomExtension = strcat(nomFichier,".jsm");
 	    printf("%s\n",nomExtension);
+	    //suppression du fichier s'il existe deja
 	    remove(nomExtension);
+	    //code assembleur
 	    codeExtension(t, nomExtension); printf("\n");
-	    
+	    FILE* fichier = NULL;
+	    fichier = fopen(nomExtension,"a+");
+	    fprintf(fichier,"Halt\n");
+	    fclose(fichier);
     	    freeAST(t);
+    	    
     	  }
 	  fclose(tmp);
    }
@@ -52,7 +58,8 @@ int main(int argc, char *argv[]){
 	    /* print the obtained tree */
 	    if (t->left!=NULL) printf("Root symbol:: %c\n", t->car);	/* check if car at root */
 	    printAST(t); printf("\n");
-	    code(t); printf("\n");	
+	    //code assembleur
+	    code(t); printf("Halt\n");	
 	    freeAST(t);
 	}
    }
