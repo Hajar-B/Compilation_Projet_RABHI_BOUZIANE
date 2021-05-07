@@ -27,19 +27,19 @@
 resultat: expression PT_VIRG;
 
 expression:
-	 expression'+'expression {printf("AddiNb\n");}
-	|expression'-'expression {printf("SubiNb\n");}
-	|expression'*'expression {printf("MultNb\n");}
-	|expression'/'expression {printf("DiviNb\n");}
+	 expression'+'expression 
+	|expression'-'expression 
+	|expression'*'expression 
+	|expression'/'expression 
 	|'('expression')'
-	|'-'expression %prec MOINSU   {printf("MOINSU\n");}
-	|expression EQUALS expression {printf("EQUALS\n");}
-	|expression NOTEQL expression {printf("NOTEQL\n");}
-	|expression GREQ expression   {printf("GREQ\n");}
-	|expression '>' expression    {printf("GR\n");}
-	|expression LOEQ expression   {printf("LOEQ\n");}
-	|expression '<' expression    {printf("LO\n");}
-	|'!'expression			{printf("NOT\n");}
+	|'-'expression %prec MOINSU   
+	|expression EQUALS expression 
+	|expression NOTEQL expression 
+	|expression GREQ expression   
+	|expression '>' expression    
+	|expression LOEQ expression   
+	|expression '<' expression    
+	|'!'expression			
 	| NOMBRE 
 	| FLOAT
 	| BOOLEAN
