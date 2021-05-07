@@ -55,7 +55,16 @@ void printAST(AST t)
   }
 }
 
+/* postfix print an AST with a file
 
+On ouvre le fichier en écriture. On parcourt l'arbre en affichant le fils gauche puis droit puis la racine. Si le noeud courant est :
+- une feuille alors on écrit l'instruction CsteNb dans le fichier
+- un noeud qui ne possède qu'un fils on écrit l'instruction NegaNb
+- un noeud qui possède deux fils alors on va chercher à quelle opération il fait référence : '+' pour AddiNb, '*' pour MultNb et '-' pour SubiNb. 
+
+On ferme le fichier.
+
+*/ 
 void codeExtension(AST t, char* file){
 	FILE* fichier = NULL;
 	fichier = fopen(file,"a+");
@@ -84,7 +93,14 @@ void codeExtension(AST t, char* file){
 }
 
 
-/* postfix print an AST*/  
+/* postfix print an AST without file
+
+On parcourt tout d'abord l'arbre en affichant le fils gauche puis droit puis la racine. Si le noeud courant est :
+- une feuille alors on affiche l'instruction CsteNb
+- un noeud qui ne possède qu'un fils on affiche l'instruction NegaNb
+- un noeud qui possède deux fils alors on va chercher à quelle opération il fait référence : '+' pour AddiNb, '*' pour MultNb et '-' pour SubiNb. 
+
+*/  
 void code(AST t)
 {	
     if (t->left!=NULL){ 
@@ -99,7 +115,7 @@ void code(AST t)
     else affichage(t->car);
 }
 
-
+//fonction qui va déterminer l'opération pour la fonction code
 void affichage(char t){
 	switch(t){
 		case '+' :

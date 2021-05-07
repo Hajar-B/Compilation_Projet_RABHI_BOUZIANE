@@ -26,10 +26,10 @@ void freeAST(AST t);
 /* affichage du code assembleur dans un fichier .jsm */
 void codeExtension(AST t, char* file);
 
-/* print postfix */
+/* print postfix without file*/
 void code(AST t);
 
-/* affichage du code assembleur */
+/* fonction qui va déterminer l'opération pour la fonction code */
 void affichage(char t);
 
 /* print an AST*/
