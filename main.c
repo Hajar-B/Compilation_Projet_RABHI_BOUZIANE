@@ -26,7 +26,7 @@ int main(int argc, char *argv[]){
 	    printf("\nParsing:: syntax OK\n\n");/* reached if parsing folllows the grammar */
 	    
 	    /* print the obtained tree */
-	    if (t->left!=NULL) printf("Root symbol:: %c\n", t->car);	/* check if car at root */
+	    if (t->left!=NULL) printf("Root symbol:: %s\n", t->car);	/* check if car at root */
 	    printAST(t); printf("\n");
 	    
 	    
@@ -36,6 +36,7 @@ int main(int argc, char *argv[]){
 	    //suppression du fichier s'il existe deja
 	    remove(nomExtension);
 	    //code assembleur
+	    
 	    codeExtension(t, nomExtension); printf("\n");
 	    FILE* fichier = NULL;
 	    fichier = fopen(nomExtension,"a+");
@@ -56,7 +57,7 @@ int main(int argc, char *argv[]){
 	    printf("\nParsing:: syntax OK\n\n");/* reached if parsing folllows the grammar */
 	    
 	    /* print the obtained tree */
-	    if (t->left!=NULL) printf("Root symbol:: %c\n", t->car);	/* check if car at root */
+	    if (t->left!=NULL) printf("Root symbol:: %s\n", t->car);	/* check if car at root */
 	    printAST(t); printf("\n");
 	    //code assembleur
 	    code(t); printf("Halt\n");	
