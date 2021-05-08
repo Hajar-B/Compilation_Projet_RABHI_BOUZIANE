@@ -53,7 +53,7 @@ expression:
   |expression '<' expression    	{ $$ = newBinaryAST("<",$1,$3); }
   |'!'expression		{ $$ = newUnaryAST("!",$2); } 
   | NOMBRE					{ $$ = newLeafAST($1); } 
-  | FLOAT						{ $$ = newLeafAST($1); } 
+  | FLOAT					{ $$ = newLeafAST($1); } 
   | BOOLEAN					{ $$ = newLeafASTb($1); } 
   ;
 
