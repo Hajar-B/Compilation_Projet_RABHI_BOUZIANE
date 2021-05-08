@@ -50,9 +50,14 @@ extern int yydebug;
   enum yytokentype
   {
     NOMBRE = 258,
-    PT_VIRG = 259,
-    FLOAT = 260,
-    MOINSU = 261
+    FLOAT = 259,
+    BOOLEAN = 260,
+    PT_VIRG = 261,
+    EQUALS = 262,
+    NOTEQL = 263,
+    GREQ = 264,
+    LOEQ = 265,
+    MOINSU = 266
   };
 #endif
 
@@ -60,13 +65,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 18 "parseur.y"
+#line 20 "parseur.y"
 
   struct _tree* exp;
   int num;
   double numf;
+  char* boo;
 
-#line 70 "parseur.tab.h"
+#line 76 "parseur.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

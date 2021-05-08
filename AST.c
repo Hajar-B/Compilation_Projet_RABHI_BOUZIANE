@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "AST.h"
 
 /* create an AST from a root value and two AST sons */
-AST newBinaryAST(char car, AST left, AST right)
+AST newBinaryAST(char* car, AST left, AST right)
 {
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
   if (t!=NULL){	/* malloc ok */
     t->car=car;
+    t->boo = NULL;
     t->left=left;
     t->right=right;
   } else printf("MALLOC! ");
@@ -15,7 +17,7 @@ AST newBinaryAST(char car, AST left, AST right)
 }
 
 /* create an AST from a root value and one AST son */
-AST newUnaryAST(char car, AST son)
+AST newUnaryAST(char* car, AST son)
 {
   return newBinaryAST(car, son, NULL);
 }
@@ -26,6 +28,23 @@ AST newLeafAST(float val)
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
   if (t!=NULL){	/* malloc ok */
     t->val=val;
+    t->car = NULL;
+    t->boo= NULL;
+    t->left=NULL;
+    t->right=NULL;
+  } else printf("MALLOC! ");
+  return t;
+}
+
+AST newLeafASTb(char* boolean){
+  AST t=(struct _tree*) malloc(sizeof(struct _tree));
+  if (t!=NULL){	/* malloc ok */
+  
+    if(strcmp(boolean,"True")==0)
+    	t->boo="True";
+    if(strcmp(boolean,"False")==0)
+    	t->boo="False";
+    t->car=NULL;
     t->left=NULL;
     t->right=NULL;
   } else printf("MALLOC! ");
@@ -48,8 +67,14 @@ void printAST(AST t)
   if (t!=NULL) {
     printf("[ ");
     printAST(t->left);
-    /* check if node is car|val */
-    if (t->left==NULL) printf(":%f: ",t->val); else printf(":%c: ",t->car);
+    if (t->left==NULL) {
+    	if(t->boo == NULL)
+	    	printf(":%f: ",t->val);
+	else
+		printf(":%s: ",t->boo);   	
+    }
+    else printf(":%s: ",t->car);
+    
     printAST(t->right);
     printf("] ");
   }

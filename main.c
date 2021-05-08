@@ -24,7 +24,7 @@ int main(int argc, char *argv[]){
 	    printf("\nParsing:: syntax OK\n\n");/* reached if parsing folllows the grammar */
 	    
 	    /* print the obtained tree */
-	    if (t->left!=NULL) printf("Root symbol:: %c\n", t->car);	/* check if car at root */
+	    if (t->left!=NULL) printf("Root symbol:: %s\n", t->car);	/* check if car at root */
 	    printAST(t); printf("\n");
 	    		
     	    freeAST(t);
@@ -41,7 +41,7 @@ int main(int argc, char *argv[]){
 	    printf("\nParsing:: syntax OK\n\n");/* reached if parsing folllows the grammar */
 	    
 	    /* print the obtained tree */
-	    if (t->left!=NULL) printf("Root symbol:: %c\n", t->car);	/* check if car at root */
+	    if (t->left!=NULL) printf("Root symbol:: %s\n", t->car);	/* check if car at root */
 	    printAST(t); printf("\n");
 	    		
 	    freeAST(t);
