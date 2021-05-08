@@ -9,10 +9,10 @@
 %{
  #include <stdio.h>	/* printf REMOVE AFTER TEST */
  #include "AST.h"
+ 
  int yylex(void);	/* flex with -Wall (implicite call) */
  int yyerror(struct _tree**, const char*); /* same for bison */
 %}
-
 
 %parse-param {struct _tree* *pT} // yyparse(&t) call => *pT = *(&t) = t 
 
@@ -20,30 +20,43 @@
   struct _tree* exp;
   int num;
   double numf;
+  char* boo;
 } ;
 
 %type  <exp> expression
-%token <num>NOMBRE PT_VIRG <numf>FLOAT
+%token <num>NOMBRE <numf>FLOAT <boo>BOOLEAN
+%token PT_VIRG EQUALS NOTEQL GREQ LOEQ
 
+
+%left EQUALS NOTEQL LOEQ '<' GREQ '>' 
 %left '+' '-'
 %left '*' '/'
+%left '!'
 %nonassoc MOINSU
 
 %%
 
 resultat:   expression	PT_VIRG	{ *pT = $1; };
 
-expression: 
-    expression '+' expression	{ $$ = newBinaryAST('+',$1,$3); }
-  | expression '-' expression	{ $$ = newBinaryAST('-',$1,$3); }
-  | expression '*' expression	{ $$ = newBinaryAST('*',$1,$3); }
-  | expression '/' expression	{ $$ = newBinaryAST('/',$1,$3); }
-  | '(' expression ')'		{ $$ = $2; }
-  | '-' expression %prec MOINSU	{ $$ = newUnaryAST('-',$2); }
-  | NOMBRE			{ $$ = newLeafAST($1); }
-  | FLOAT			{ $$ = newLeafAST($1); } 
+expression:
+    expression '+' expression	{ $$ = newBinaryAST("+",$1,$3); }
+  | expression '-' expression	{ $$ = newBinaryAST("-",$1,$3); }
+  | expression '*' expression	{ $$ = newBinaryAST("*",$1,$3); }
+  | expression '/' expression	{ $$ = newBinaryAST("/",$1,$3); }
+  | '(' expression ')'				{ $$ = $2; }
+  | '-' expression %prec MOINSU		{ $$ = newUnaryAST("-",$2); }
+  |expression EQUALS expression 	{ $$ = newBinaryAST("==",$1,$3); }
+  |expression NOTEQL expression 	{ $$ = newBinaryAST("!=",$1,$3); }
+  |expression GREQ expression			{ $$ = newBinaryAST(">=",$1,$3); }
+  |expression '>' expression			{ $$ = newBinaryAST(">",$1,$3); }
+  |expression LOEQ expression   	{ $$ = newBinaryAST("<=",$1,$3); }
+  |expression '<' expression    	{ $$ = newBinaryAST("<",$1,$3); }
+  |'!'expression		{ $$ = newUnaryAST("!",$2); } 
+  | NOMBRE					{ $$ = newLeafAST($1); } 
+  | FLOAT						{ $$ = newLeafAST($1); } 
+  | BOOLEAN					{ $$ = newLeafASTb($1); } 
   ;
-  
+
 %%
 
 #include <stdio.h>	/* printf */
