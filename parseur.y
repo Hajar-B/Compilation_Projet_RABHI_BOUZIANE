@@ -9,28 +9,19 @@
 %}
 
 
-%token NOMBRE FLOAT BOOLEAN 
-%token PT_VIRG EQUALS NOTEQL GREQ LOEQ
-%token IDENT
+%token NOMBRE PT_VIRG FLOAT BOOLEAN EQUALS NOTEQL GREQ LOEQ
 
-%left '='
 %left EQUALS NOTEQL LOEQ '<' GREQ '>' 
 %left '+' '-'
 %left '*' '/'
 %left '!'
 %nonassoc MOINSU
 
-%start programme
 
 %%
 
-programme: commande PT_VIRG
-	| commande PT_VIRG programme 
-	;
 
-commande: expression 
-	| IDENT '=' expression
-	;
+resultat: expression PT_VIRG;
 
 expression:
 	 expression'+'expression 
@@ -49,7 +40,6 @@ expression:
 	| NOMBRE 
 	| FLOAT
 	| BOOLEAN
-	| IDENT
 	;
 %%
 

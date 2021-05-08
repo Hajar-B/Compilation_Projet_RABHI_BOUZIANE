@@ -50,15 +50,14 @@ extern int yydebug;
   enum yytokentype
   {
     NOMBRE = 258,
-    FLOAT = 259,
-    BOOLEAN = 260,
-    PT_VIRG = 261,
+    PT_VIRG = 259,
+    FLOAT = 260,
+    BOOLEAN = 261,
     EQUALS = 262,
     NOTEQL = 263,
     GREQ = 264,
     LOEQ = 265,
-    IDENT = 266,
-    MOINSU = 267
+    MOINSU = 266
   };
 #endif
 

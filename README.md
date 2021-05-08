@@ -1,57 +1,108 @@
-# Fragment p1.0
+# Fragment p0.2
 
-Réalisé par : Sohayla RABHI
+Réalisé par : BOUZIANE Hajar
 
 ## Description 
 
 1. **lexeur.l** : 
-- le fichier *parseur.tab.h* est inclu car il permet de définir les tokens NOMBRE, FLOAT, IDENT, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ et PT_VIRG. 
-- une expression régulière associée à ces tokens ont été ajoutées.
+- le fichier *parseur.tab.h* est inclu car il permet de définir les token NOMBRE, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, PT_VIRG et FLOAT. 
+- une expression régulière associée à ce token a été ajoutée.
 
 2. **parseur.y** :
-- on utilise %start car maintenant le non-terminal principal n'est plus expression mais programme.
-- on définit 9 tokens : NOMBRE, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, PT_VIRG FLOAT et IDENT. Notons que les opérations "==", "!=", "<=", ">=" sont des multisymboles d'où la création de leur token.
+- on définit 8 tokens : NOMBRE, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, PT_VIRG et FLOAT. Notons que les opérations "==", "!=", "<=", ">=" sont des multisymboles d'où la création de leur token.
 - on définit les règles d'associativité gauche grâce au %left.
-- on définit les règles de priorités : L'affection '=' est définie en premier car elle est la moins prioritaire des opérations. Les opérations booléennes sont définies en deuxième. S'en suit du '+' et du '-' car ils sont moins prioritaires que le '*' et le '/' (que l'on a donc défini dans un troisième temps). Et pour finir, comme le '!' est prioritaire sur toutes les précédentes opérations, il a été défini en dernier.
+- on définit les règles de priorités : les opérations booléennes (étant les moins prioritaires) sont définies en premier. S'en suit du '+' et du '-' car elles sont moins prioritaires que le '*' et le '/' (que l'on a donc défini dans un troisième temps). Et pour finir, comme le '!' est prioritaire sur toutes les précédentes opérations, il a été défini en dernier.
 - on définit une balise MOINSU pour sigifier qu'il a une autre priorité que le '-'.
-- par conséquent, on a mis à jour la grammaire.
+- par conséquent, on a mis à jour la grammaire sans oublier d'ajouter les opérations '<' et '>'.
 
 
 3. **test.txt**:
 
-y=_f+2;  => error 
+1+2==3;
+- AddiNb
+- Equals 
 
-- une variable ne doit commencer que par une lettre minuscule
+=> ok
 
-y=z=3;   => error 
+(1+2)==3;
+- AddiNb
+- Equals 
 
-- on ne peut pas avoir d'affectation à la suite
+=> ok
 
-y=3=z=True; => error
+1+(2==3); 
+- Equals
+- AddiNb 
 
-x=3;(y=2;z=1;); => error 
+=> ok
 
-- on ne peut pas mettre d'affectation dans des parenthèses
+True+3!=5.123; 
+- AddiNb
+- NotEq 
 
-!et=oui; => error 
+=>ok
 
-- on ne peut pas faire de négation d'une affectation
+Fale<=33333/33; 
+- DiviNb
+- LoEq 
 
-x_oui=(z=z;); => error 
+=> ok
 
-2364agj=87; => error 
+0-32<(7+7.000000);
+- SubiNb
+- AddiNb
+- Lo 
 
-- soit il manque un point virgule entre le nombre et la variable soit la variable ne doit pas commencer par un nombre
+=> ok
 
-x=3;  => ok
+True*(3>=43); 
+- GrEq
+- MultNb 
 
-x=10.2;y=f_+2; => ok
+=> ok
 
-s0hA_yla; => ok
+True*(3>43);
+- Gr
+- MultNb
 
-i=0;i<10.5;i=i+0.5; => ok
+=>ok
 
+!!True; 
+- Not
+- Not 
 
+=> ok
+
+True*34+1==False-!True; 
+- MultNb
+- AddiNB
+- Not
+- SubiNb
+- Equals 
+
+=> ok
+
+!(True==False); 
+- Equals
+- Not 
+
+=> ok
+
+True==!False;
+- Not
+- Equals 
+
+=> ok
+
+!!True<=-3.6!=21+4; 
+- Not
+- Not
+- Moinsu
+- LoEq
+- AddiNb
+- NoEq 
+
+=> ok
 
 ## Comment compiler et exécuter ?
 
