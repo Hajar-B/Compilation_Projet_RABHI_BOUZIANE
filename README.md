@@ -1,57 +1,48 @@
-# Fragment p1.0
+# Frangment 0.0
 
-Réalisé par : Sohayla RABHI
+Réalisé par : BOUZIANE Hajar
 
 ## Description 
 
 1. **lexeur.l** : 
-- le fichier *parseur.tab.h* est inclu car il permet de définir les tokens NOMBRE, FLOAT, IDENT, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ et PT_VIRG. 
-- une expression régulière associée à ces tokens ont été ajoutées.
+- le fichier *parseur.tab.h* est inclu car il permet de définir les tokens NUMBER et PT_VIRG
+- Pour chaque expression régulière, on renvoie le token qui lui est associé. La première expression régulière reconnaît un nombre tandis que la seconde reconnaît un point virgule.
 
 2. **parseur.y** :
-- on utilise %start car maintenant le non-terminal principal n'est plus expression mais programme.
-- on définit 9 tokens : NOMBRE, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, PT_VIRG FLOAT et IDENT. Notons que les opérations "==", "!=", "<=", ">=" sont des multisymboles d'où la création de leur token.
-- on définit les règles d'associativité gauche grâce au %left.
-- on définit les règles de priorités : L'affection '=' est définie en premier car elle est la moins prioritaire des opérations. Les opérations booléennes sont définies en deuxième. S'en suit du '+' et du '-' car ils sont moins prioritaires que le '*' et le '/' (que l'on a donc défini dans un troisième temps). Et pour finir, comme le '!' est prioritaire sur toutes les précédentes opérations, il a été défini en dernier.
-- on définit une balise MOINSU pour sigifier qu'il a une autre priorité que le '-'.
-- par conséquent, on a mis à jour la grammaire.
+- on définit 2 tokens : NUMBER et PT_VIRG
+- on définit les règles d'associativité gauche avec %left
+- on définit une balise MOINSU pour signifier qu'il a une autre priorité que le '-'
+- on définit les règles de priorité : '*' est prioritaire sur '+' et '-' car il est défini après le '+' et le '-'.
+- on définit la grammaire
 
+3. **main.c**:
+- programme exécutable qui va parser le contenu d'un fichier.
+- affiche un message indiquant si la synthaxe de ce contenu est correcte ou non.
 
-3. **test.txt**:
+4. **test.txt**:
+- fichier qui contient une expression JS à parser.
+- on a tester les expressions suivantes: 
+;       => error
 
-y=_f+2;  => error 
+(3+3;); => error
 
-- une variable ne doit commencer que par une lettre minuscule
+3*(-3--2; => error
 
-y=z=3;   => error 
+3;      => OK
 
-- on ne peut pas avoir d'affectation à la suite
+3+3;    => OK
 
-y=3=z=True; => error
+(3+3);  => OK
 
-x=3;(y=2;z=1;); => error 
+-3;	=> OK
 
-- on ne peut pas mettre d'affectation dans des parenthèses
+(-3);	=> OK
 
-!et=oui; => error 
+(-3--2); => OK
 
-- on ne peut pas faire de négation d'une affectation
+(-3*2); => OK
 
-x_oui=(z=z;); => error 
-
-2364agj=87; => error 
-
-- soit il manque un point virgule entre le nombre et la variable soit la variable ne doit pas commencer par un nombre
-
-x=3;  => ok
-
-x=10.2;y=f_+2; => ok
-
-s0hA_yla; => ok
-
-i=0;i<10.5;i=i+0.5; => ok
-
-
+(-3-2); => OK
 
 ## Comment compiler et exécuter ?
 
@@ -70,6 +61,56 @@ Pour exécuter, deux possibilités s'offrent à vous :
 
 ./main
 (puis saisir sur le terminal une expression à parser)
+
+
+
+# Frangment 0.1
+
+Réalisé par : RABHI Sohayla
+
+## Description 
+
+1. **lexeur.l** : 
+- le fichier *parseur.tab.h* est inclu car il définit le nouveau token FLOAT 
+- une expression régulière associé à ce token a été ajouté
+
+2. **parseur.y** :
+- on définit 1 nouveau token : FLOAT
+- on définit les règles de priorité : '*' et '/' sont prioritaire sur '+' et '-' car ils sont définis après le '+' et le '-'.
+- par conséquent, on a mis à jour la grammaire
+
+
+3. **test.txt**:
+- fichier qui contient une expression JS à parser.
+- on a tester les expressions suivantes: 
+
+.;        	=> error
+
+3.2       	=> error
+
+.1;	  	=> error
+
+3+(.2);  	=> error
+
+/	 	=> error
+
+3/;      	=> error
+
+3.2;     	=> OK
+
+3.;      	=> OK
+
+2.5*34;  	=> OK
+
+12.+2;	 	=> OK
+
+3./(34--4);	=> OK
+
+2.5/5; 	=> OK
+
+5/(3*2); 	=> OK
+
+1.2/2+6-7; 	=> OK
 
 
 
