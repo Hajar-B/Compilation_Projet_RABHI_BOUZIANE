@@ -26,7 +26,7 @@ int main(int argc, char *argv[]){
 	    printf("\nParsing:: syntax OK\n\n");/* reached if parsing folllows the grammar */
 	    
 	    /* print the obtained tree */
-	    if (t->left!=NULL) printf("Root symbol:: %s\n", t->car);	/* check if car at root */
+	    if (t->left!=NULL) printf("Root symbol:: %c\n", t->car);	/* check if car at root */
 	    printAST(t); printf("\n");
 	    
 	    //On récupère le nom du fichier sans l'extension 
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]){
 	    printf("%s\n",nomExtension);
 	    //suppression du fichier s'il existe deja
 	    remove(nomExtension);
-	    //On crée le code assembleur qui sera écrit dans le nouveau fichier	    
+	    //On crée le code assembleur qui sera écrit dans le nouveau fichier
 	    codeExtension(t, nomExtension); printf("\n");
 	    //On ajoute à la fin du code : Halt 
 	    FILE* fichier = NULL;
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]){
 	    printf("\nParsing:: syntax OK\n\n");/* reached if parsing folllows the grammar */
 	    
 	    /* print the obtained tree */
-	    if (t->left!=NULL) printf("Root symbol:: %s\n", t->car);	/* check if car at root */
+	    if (t->left!=NULL) printf("Root symbol:: %c\n", t->car);	/* check if car at root */
 	    printAST(t); printf("\n");
 	    //On affiche le code assembleur sur le terminal
 	    code(t); 
