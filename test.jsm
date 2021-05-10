@@ -10,7 +10,7 @@ MultNb
 CsteNb 0.000000 
 AddiNb
 LoEqNb
-SetVar  
+SetVar z 
 GetVar boubou 
 CsteNb 3.000000 
 MultNb

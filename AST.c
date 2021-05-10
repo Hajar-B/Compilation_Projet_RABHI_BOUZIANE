@@ -28,7 +28,7 @@ AST newBinaryASTide(char* car, char* ide, AST son)
 {
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
   if (t!=NULL){
-    t->ide = ide;
+    t->ide = chaine(ide);
     t->car=car;
     t->boo = NULL;
     t->left= son;
