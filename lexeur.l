@@ -9,8 +9,9 @@
 %%
 
 0|[1-9][0-9]*  { printf("lex::NOMBRE %s\n",yytext); yylval.num=atoi(yytext); return NOMBRE; }
-0|[1-9][0-9]*"."[0-9]* { printf("lex::FLOAT %s\n",yytext); yylval.numf=atof(yytext); return FLOAT; }
+(0|[1-9][0-9]*)"."[0-9]* { printf("lex::FLOAT %s\n",yytext); yylval.numf=atof(yytext); return FLOAT; }
 "True"|"False" { printf("lex::BOOLEAN %s\n",yytext); yylval.boo=yytext; return BOOLEAN; }
+[a-z][0-9,A-Z,a-z,_]* { printf("lex::IDENT %s\n",yytext);  yylval.ide=yytext; return IDENT; }
 ==		{ printf("lex::EQUALS %s\n",yytext); return EQUALS; }
 !=		{ printf("lex::NOTEQL %s\n",yytext); return NOTEQL; }
 >=		{ printf("lex::GREQ %s\n",yytext); return GREQ; }
