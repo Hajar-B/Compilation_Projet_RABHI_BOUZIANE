@@ -1,18 +1,20 @@
-# Fragment c0.2
+# Fragment c1.0
 
-Réalisé par : BOUZIANE Hajar
+Réalisé par : Sohayla RABHI
 
 ## Description 
 
 1. **lexeur.l** : 
-* le fichier *parseur.tab.h* est inclu car il permet de définir les tokens NOMBRE, PT_VIRG, FLOAT, BOOLEAN, EQUALS, NOTEQL, GREQ et LOEQ.
+* le fichier *parseur.tab.h* est inclu car il permet de définir les tokens NOMBRE, PT_VIRG, FLOAT, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ et IDENT.
 * On a ajouté un type int pour notre token NOMBRE
 * On a ajouté un type double pour notre token FLOAT
 * On a ajouté un type char* pour notre token BOOLEAN
+* On a ajouté un type char* pour notre token IDENT
 * Pour chaque expression régulière, on renvoie le token qui lui est associé. La première expression régulière reconnaît :
   * un nombre, 
   * un flottant, 
   * un booléen,
+  * une variable,
   * une égalité,
   * une inégalité, 
   * un 'supérieur ou égale', 
@@ -20,25 +22,27 @@ Réalisé par : BOUZIANE Hajar
   * un point virgule.
 
 2. **parseur.y** :
-- on prend l'adresse de l'AST vide et que l'on modifiera plus tard
-- par défaut les tokens de bison ont le type int mais puisque l'on
-doit implémenter la structure de l'arbre syntaxique, les flottants et les booléens, alors on utilise le %union
-- on définit un type expression, il permet de spécifier le type qui sera généré dans l'AST. En d'autres termes expression va construire un AST de *exp*.
-- on définit 8 tokens : NOMBRE, FLOAT, BOOLEAN, PT_VIRG, EQUALS, NOTEQL, GREQ et LOEQ.
+- on utilise %start car maintenant le non-terminal principal n'est plus expression mais programme.
+- on définit trois types : un type expression, un type programme_ast et un autre type commande_ast (non-terminaux). En d'autres termes ces non-terminaux vont construire un AST de *exp*.
+- on définit 9 tokens : NOMBRE, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, PT_VIRG FLOAT et IDENT. Notons que les opérations "==", "!=", "<=", ">=" sont des multisymboles d'où la création de leur token.
 - on définit les règles d'associativité gauche avec %left
-- on définit les règles de priorité : les opérations booléennes (étant les moins prioritaires) sont définies en premier. S'en suit du '+' et du '-' car ils sont moins prioritaires que le '*' et le '/' (que l'on a donc définit dans un troisième temps). Pour finir, comme le '!' est prioritaire sur toutes les précédentes opérations, il a été défini en dernier.
-- on définit une balise MOINSU pour signifier qu'il a une autre priorité que le '-'
-- Par conséquent, on a mis à jour la grammaire sans oublier d'ajouter les opérations '<' et '>'.
+- on définit les règles de priorités : L'affection '=' est définie en premier car elle est la moins prioritaire des opérations. Les opérations booléennes sont définies en deuxième. S'en suit du '+' et du '-' car ils sont moins prioritaires que le '*' et le '/' (que l'on a donc défini dans un troisième temps). Et pour finir, comme le '!' est prioritaire sur toutes les précédentes opérations, il a été défini en dernier.
+- on définit une balise MOINSU pour sigifier qu'il a une autre priorité que le '-'.
+- on a ajouté un noeud prog, pour y spécifier dans l'AST les suites de commandes. 
+- par conséquent, on a mis à jour la grammaire.
 
 3. **AST.h**:
 - on a modifié le type du champ val pour que ce ne soit plus des entiers mais uniquement des flottants.
-- de plus, on ajouté un champ *boo* à la structure de notre AST qui fera référence aux booléens.
+- on a ajouté un champ *boo* à la structure de notre AST qui fera référence aux booléens.
+- on a également ajouté un champ *ide* à la structure de notre AST qui fera référence aux variables.
 
 3. **AST.c**:
 - suite à la précédente modification on a modifié les fonctions pour qu'elles affichent des flottants. 
 - on a ajouté la fonction newLeafASTb(char* boolean) qui permettra d'ajouter une feuille contenant un booléen.
 - code(AST t) et affichage(char* t): ces fonctions vont afficher le code assembleur lorsqu'aucun fichier n'est donné en paramètre lors de l'exécution du main
 - codeExtension(AST t, char* file) : cette fonction va écrire dans le fichier file (qui sera avec l'extension .jsm) le code assembleur.
+- Une fonction newBinaryASTide(char* car, char* ide, AST son) a été ajouté, elle crée un arbre où la racine ne possède qu'un fils. Par exemple, pour l'expression y=x+1; la racine stockera le "y=" quand au fils il correspondra au sous arbre qui contiendra l'expression x+1.
+- Une autre fonction newLeafASTide(char* chaine) qui va créer la feuille qui contiendra une variable;
 
 4. **main.c**:
 - programme exécutable qui va parser le contenu d'un fichier.
@@ -50,112 +54,34 @@ doit implémenter la structure de l'arbre syntaxique, les flottants et les bool�
 - fichier qui contient une expression JS à parser.
 - on a testé les expressions suivantes: 
 
-
-1+2==3;
-
-- CsteNb 1.000000 
-- CsteNb 2.000000 
-- AddiNb
-- CsteNb 3.000000 
-- Equals
-- Halt
-
-=> ok
-
-(1+2)==3;
+z=1+True<=!False\*hajar\*true+0;hajar=boubou\*3;soso=hajar+3\*louise;
 
 - CsteNb 1.000000 
-- CsteNb 2.000000 
-- AddiNb
-- CsteNb 3.000000 
-- Equals
-- Halt
-
-=> ok
-
-1+(2==3); 
-
-- CsteNb 1.000000 
-- CsteNb 2.000000 
-- CsteNb 3.000000 
-- Equals
-- AddiNb
-- Halt
-
-=> ok
-
-True+3!=5.123; 
-
 - CsteBo True 
-- CsteNb 3.000000 
 - AddiNb
-- CsteNb 5.123000 
-- NoEql
-- Halt
-
-=>ok
-
-False<=33333/33; 
-
 - CsteBo False 
-- CsteNb 33333.000000 
-- CsteNb 33.000000 
-- DiviNb
-- LoEqNb
-- Halt
-
-
-=> ok
-
-0-32<(7+7.000000);
-
-- CsteNb 0.000000 
-- CsteNb 32.000000 
-- SubiNb
-- CsteNb 7.000000 
-- CsteNb 7.000000 
-- AddiNb
-- LoStNb
-- Halt
-
-=> ok
-
-!!True; 
-
-- CsteBo True 
 - Not 
-- Not 
-- Halt
-
-
-=> ok
-
-True*34+1==False-!True; 
-
-- CsteBo True 
-- CsteNb 34.000000 
+- GetVar hajar 
 - MultNb
-- CsteNb 1.000000 
+- GetVar true 
+- MultNb
+- CsteNb 0.000000 
 - AddiNb
-- CsteBo False 
-- CsteBo True 
-- Not 
-- SubiNb
-- Equals
+- LoEqNb
+- SetVar z 
+- GetVar boubou 
+- CsteNb 3.000000 
+- MultNb
+- SetVar hajar 
+- GetVar hajar 
+- CsteNb 3.000000 
+- GetVar louise 
+- MultNb
+- AddiNb
+- SetVar soso 
 - Halt
 
 
-=> ok
-
-!(True==False); 
-
-- CsteBo True 
-- CsteBo False 
-- Equals
-- Not 
-- Halt
-
-=> ok
 
 ## Comment compiler et exécuter ?
 
@@ -174,5 +100,4 @@ Pour exécuter, deux possibilités s'offrent à vous :
 
 ./main
 (puis saisir sur le terminal une expression à parser)
-
 

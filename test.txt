@@ -1,1 +1,2 @@
-True+!3/(True*False)<=(True==False);
+z=1+True<=!False*hajar*true+0;hajar=boubou*3;soso=hajar+3*louise;
+

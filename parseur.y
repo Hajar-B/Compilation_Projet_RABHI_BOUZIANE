@@ -21,41 +21,55 @@
   int num;
   double numf;
   char* boo;
+  char* ide;
 } ;
 
 %type  <exp> expression
-%token <num>NOMBRE <numf>FLOAT <boo>BOOLEAN
+%type  <exp> programme_ast
+%type  <exp> commande_ast
+%token <num>NOMBRE <numf>FLOAT <boo>BOOLEAN <ide>IDENT
 %token PT_VIRG EQUALS NOTEQL GREQ LOEQ
 
-
+%left '='
 %left EQUALS NOTEQL LOEQ '<' GREQ '>' 
 %left '+' '-'
 %left '*' '/'
 %left '!'
 %nonassoc MOINSU
 
+%start resultat
+
 %%
 
-resultat:   expression	PT_VIRG	{ *pT = $1; };
+resultat : programme_ast { *pT = $1; };
+
+programme_ast: commande_ast	      { $$ = $1; }
+	| commande_ast programme_ast { $$ = newBinaryAST("prog",$1,$2);}
+	;
+commande_ast: expression PT_VIRG	{ $$ = $1; }
+	| IDENT '=' expression PT_VIRG { $$ = newBinaryASTide("=",$1,$3); } 
+	;	
 
 expression:
     expression '+' expression	{ $$ = newBinaryAST("+",$1,$3); }
   | expression '-' expression	{ $$ = newBinaryAST("-",$1,$3); }
   | expression '*' expression	{ $$ = newBinaryAST("*",$1,$3); }
   | expression '/' expression	{ $$ = newBinaryAST("/",$1,$3); }
-  | '(' expression ')'				{ $$ = $2; }
-  | '-' expression %prec MOINSU		{ $$ = newUnaryAST("-",$2); }
-  |expression EQUALS expression 	{ $$ = newBinaryAST("==",$1,$3); }
-  |expression NOTEQL expression 	{ $$ = newBinaryAST("!=",$1,$3); }
-  |expression GREQ expression			{ $$ = newBinaryAST(">=",$1,$3); }
-  |expression '>' expression			{ $$ = newBinaryAST(">",$1,$3); }
-  |expression LOEQ expression   	{ $$ = newBinaryAST("<=",$1,$3); }
-  |expression '<' expression    	{ $$ = newBinaryAST("<",$1,$3); }
-  |'!'expression		{ $$ = newUnaryAST("!",$2); } 
-  | NOMBRE					{ $$ = newLeafAST($1); } 
-  | FLOAT					{ $$ = newLeafAST($1); } 
-  | BOOLEAN					{ $$ = newLeafASTb($1); } 
+  | '(' expression ')'		 { $$ = $2; }
+  | '-' expression %prec MOINSU { $$ = newUnaryAST("-",$2); }
+  |expression EQUALS expression { $$ = newBinaryAST("==",$1,$3); }
+  |expression NOTEQL expression { $$ = newBinaryAST("!=",$1,$3); }
+  |expression GREQ expression	 { $$ = newBinaryAST(">=",$1,$3); }
+  |expression '>' expression	 { $$ = newBinaryAST(">",$1,$3); }
+  |expression LOEQ expression   { $$ = newBinaryAST("<=",$1,$3); }
+  |expression '<' expression    { $$ = newBinaryAST("<",$1,$3); }
+  |'!'expression		 { $$ = newUnaryAST("!",$2); } 
+  | NOMBRE			 { $$ = newLeafAST($1); } 
+  | FLOAT			 { $$ = newLeafAST($1); } 
+  | BOOLEAN			 { $$ = newLeafASTb($1); } 
+  | IDENT			 { $$ = newLeafASTide($1); }
   ;
+
 
 %%
 

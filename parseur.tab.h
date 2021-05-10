@@ -52,12 +52,13 @@ extern int yydebug;
     NOMBRE = 258,
     FLOAT = 259,
     BOOLEAN = 260,
-    PT_VIRG = 261,
-    EQUALS = 262,
-    NOTEQL = 263,
-    GREQ = 264,
-    LOEQ = 265,
-    MOINSU = 266
+    IDENT = 261,
+    PT_VIRG = 262,
+    EQUALS = 263,
+    NOTEQL = 264,
+    GREQ = 265,
+    LOEQ = 266,
+    MOINSU = 267
   };
 #endif
 
@@ -71,8 +72,9 @@ union YYSTYPE
   int num;
   double numf;
   char* boo;
+  char* ide;
 
-#line 76 "parseur.tab.h"
+#line 78 "parseur.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

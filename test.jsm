@@ -1,13 +1,24 @@
+CsteNb 1.000000 
 CsteBo True 
-CsteNb 3.000000 
-Not 
-CsteBo True 
-CsteBo False 
-MultNb
-DiviNb
 AddiNb
-CsteBo True 
 CsteBo False 
-Equals
+Not 
+GetVar hajar 
+MultNb
+GetVar true 
+MultNb
+CsteNb 0.000000 
+AddiNb
 LoEqNb
+SetVar z 
+GetVar boubou 
+CsteNb 3.000000 
+MultNb
+SetVar hajar 
+GetVar hajar 
+CsteNb 3.000000 
+GetVar louise 
+MultNb
+AddiNb
+SetVar soso 
 Halt
