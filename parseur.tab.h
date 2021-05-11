@@ -49,9 +49,9 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    NOMBRE = 258,
-    FLOAT = 259,
-    BOOLEAN = 260,
+    NUMBER = 258,
+    BOOLEAN = 259,
+    NAN = 260,
     IDENT = 261,
     PT_VIRG = 262,
     EQUALS = 263,
@@ -70,12 +70,11 @@ union YYSTYPE
 #line 19 "parseur.y"
 
   struct _tree* exp;
-  int num;
-  double numf;
+  char* numf;
   char* boo;
   char* ide;
 
-#line 79 "parseur.tab.h"
+#line 78 "parseur.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -1,20 +1,19 @@
-# Fragment c1.2
+# Fragment c1.3
 
-Réalisé par : Sohayla RABHI
+Réalisé par : Hajar BOUZIANE
 
 ## Description 
 
 1. **lexeur.l** : 
-* le fichier *parseur.tab.h* est inclu car il permet de définir les tokens NOMBRE, FLOAT, IDENT, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, INCRE et PT_VIRG. 
-* On a ajouté un type int pour notre token NOMBRE
-* On a ajouté un type double pour notre token FLOAT
-* On a ajouté un type char* pour notre token BOOLEAN
+* le fichier *parseur.tab.h* est inclu car il permet de définir les tokens NAN, NUMBER, IDENT, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, INCRE et PT_VIRG. 
+* On a ajouté un type char* pour notre token NUMBER
+* On a ajouté un type char* pour nos tokens BOOLEAN et NAN
 * On a ajouté un type char* pour notre token IDENT
-* Pour chaque expression régulière, on renvoie le token qui lui est associé. La première expression régulière reconnaît :
-  * un nombre, 
-  * un flottant, 
-  * un booléen,
+* Pour chaque expression régulière, on renvoie le token qui lui est associé. Les expressions régulières reconnaîssent :
+  * un 'Not a Number'
+  * un number, 
   * une variable,
+  * un booléen,
   * une égalité,
   * une inégalité, 
   * un 'supérieur ou égale', 
@@ -25,12 +24,11 @@ Réalisé par : Sohayla RABHI
 * une expression régulière a été créé pour des commentaires unilignes.
 * une autre expression régulière a été créé pour des commentaires multilignes.
 
-
 2. **parseur.y** :
 - on utilise %start car maintenant le non-terminal principal n'est plus expression mais programme.
 - on définit trois types : un type expression, un type programme_ast et un autre type commande_ast (non-terminaux). En d'autres termes ces non-terminaux vont construire un AST de *exp*.
-- on définit 10 tokens : NOMBRE, FLOAT, IDENT, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, INCRE et PT_VIRG. Notons que les opérations "==", "!=", "<=", ">=" et "++" sont des multisymboles d'où la création de leur token.
-- on définit les règles d'associativité gauche avec %left
+- on définit 10 tokens : NAN, NUMBER, IDENT, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, INCRE et PT_VIRG. Notons que les opérations "==", "!=", "<=", ">=" et "++" sont des multisymboles d'où la création de leur token.
+- on définit les règles d'associativité gauche grâce au %left.
 - on définit les règles de priorités : L'affection '=' est définie en premier car elle est moins prioritaire que toutes les autres opérations. Les opérations booléennes sont définies en deuxième. S'en suit du '+' et du '-' car ils sont moins prioritaires que le '*' et le '/' (que l'on a donc défini dans un troisième temps). Comme le '++' est prioritaire sur toutes les précédentes opérations, il a été défini après le '!'.
 - on définit une balise MOINSU pour sigifier qu'il a une autre priorité que la soustraction '-'.
 - on a ajouté un noeud prog, pour y spécifier dans l'AST les suites de commandes. 
@@ -59,57 +57,77 @@ Réalisé par : Sohayla RABHI
 
 6. **test.txt**:
 
-//z=1+True<=!False*hajar++*true+0;hajar=boubou*3;soso=hajar+3*louise;
+//oto
+
 3;
-/* 
- ** je suis un commentaire **
- ++ je suis un commentaire **
- // je suis un commentaire ++
- ** je suis un commentaire 00
- ** je suis un commentaire **
- *****/
- 6+m; // je suis un autre commentaire mais uniligne
- 8+0;dksnvo=h;y++;
 
-***
+56e-89;
 
-lex::NOMBRE 3
-lex::PT_VIRG ;
-lex::NOMBRE 6
-lex::char +
-lex::IDENT m
-lex::PT_VIRG ;
-lex::NOMBRE 8
-lex::char +
-lex::NOMBRE 0
-lex::PT_VIRG ;
-lex::IDENT dksnvo
-lex::char =
-lex::IDENT h
-lex::PT_VIRG ;
-lex::IDENT y
-lex::INCRE ++
-lex::PT_VIRG ;
+.364;
 
-Parsing:: syntax OK
+.364e5;
 
-***
+.364e-5;
 
-CsteNb 3.000000 
-CsteNb 6.000000 
-GetVar m
-AddiNb
-CsteNb 8.000000 
-CsteNb 0.000000 
-AddiNb
-GetVar h
-SetVar dksnvo 
-GetVar y
-CstNb 1
-AddiNb
-SetVar y
-Halt
+23.568;
 
+346.78e53;
+
+346.78e-53;
+
+3/0;
+
+0/0;
+
+0./0;
+
+0/0.;
+
+0/.0;
+
+.0/0;
+
+/*
+
+** je suis un commentaire **
+
+++ je suis un commentaire **
+
+// je suis un commentaire ++
+
+** je suis un commentaire 00
+
+** je suis un commentaire **
+
+*****/
+
+6+m; // je suis un autre commentaire mais uniligne
+
+8+0;dksnvo=h;y++;
+
+*** 
+
+- CsteNb 3 
+- CsteNb 56e-89 
+- CsteNb .364 
+- CsteNb .364e5 
+- CsteNb .364e-5 
+- CsteNb 23.568 
+- CsteNb 346.78e53 
+- CsteNb 346.78e-53 
+- CsteNb 6 
+- GetVar m
+- AddiNb
+- CsteNb 8 
+- CsteNb 0 
+- AddiNb
+- GetVar h
+- SetVar dksnvo 
+- GetVar y
+- CstNb 1
+- AddiNb
+- SetVar y
+- Halt
 
 ## Comment compiler et exécuter ?
 

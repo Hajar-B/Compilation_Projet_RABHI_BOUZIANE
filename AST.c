@@ -43,11 +43,11 @@ AST newBinaryASTide(char* car, char* ide, AST son)
 
 
 /* create an AST leaf from a value */
-AST newLeafAST(float val)
+AST newLeafAST(char* val)
 {
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
-  if (t!=NULL){	/* malloc ok */
-    t->val=val;
+  if (t!=NULL){	/* malloc ok */  
+    t->val=chaine(val);
     t->car = NULL;
     t->boo = NULL;
     t->ide = NULL;
@@ -61,11 +61,13 @@ AST newLeafAST(float val)
 AST newLeafASTb(char* chaine){
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
   if (t!=NULL){	/* malloc ok */
-  
+ 
     if(strcmp(chaine,"True")==0)
     	t->boo="True";
     else if(strcmp(chaine,"False")==0)
     	t->boo="False";
+    else
+    	t->boo="NaN";
     t->ide=NULL;
     t->car=NULL;
     t->left=NULL;
@@ -108,8 +110,15 @@ void printAST(AST t)
     printf("[ ");
     printAST(t->left);
     if (t->left==NULL) { 
-    	if(t->boo == NULL && (t->ide == NULL)){
-	    	printf(":%f: ",t->val);
+    	if(t->boo == NULL && (t->ide == NULL)){ 
+	        char c[9] = {'+','*','/','<','>','=','!',';'};
+	        char c2[9] = {'+','*','-','/','<','>','=','!',';'};
+	        
+	        if(!strstr(t->val,"e-"))
+  			strtok(t->val,c2);
+  		else
+  			strtok(t->val,c);
+	    	printf(":%s: ",t->val);
 	}
 	else if (t->ide == NULL)
 		printf(":%s: ",t->boo); 
@@ -178,10 +187,20 @@ void codeExtension(AST t, char* file){
     }
    
     if(t->left == NULL){
-    	if(t->boo == NULL && (t->ide == NULL))
-		  fprintf(fichier,"CsteNb %f \n",t->val);
-	else if (t->ide == NULL)
-		fprintf(fichier,"CsteBo %s \n",t->boo);
+    	if(t->boo == NULL && (t->ide == NULL)){
+    		char c[9] = {'+','*','/','<','>','=','!',';'};
+	        char c2[9] = {'+','*','-','/','<','>','=','!',';'};
+	        
+	        if(!strstr(t->val,"e-"))
+  			strtok(t->val,c2);
+  		else
+  			strtok(t->val,c);
+  		fprintf(fichier,"CsteNb %s \n",t->val);
+    	}
+	else if (t->ide == NULL){
+		if(strcmp(t->boo,"NaN"))
+			fprintf(fichier,"CsteBo %s \n",t->boo);
+	}
 	else if (t->boo == NULL) {
 		if(strstr(t->ide, "++")){
 			strtok(t->ide,"++");
@@ -240,6 +259,7 @@ On parcourt tout d'abord l'arbre en affichant le fils gauche puis droit puis la 
 */  
 void code(AST t)
 {	
+
     if (t->left!=NULL){ 
     	code(t->left); 
     }
@@ -247,11 +267,24 @@ void code(AST t)
     	code(t->right);
     }
     if(t->left == NULL){
-	if(t->boo == NULL && (t->ide == NULL))
-	    	printf("CsteNb %f \n",t->val);
-	else if (t->ide == NULL)
-		printf("CsteBo %s \n",t->boo); 
-	else if (t->boo == NULL)  {
+
+	if(t->boo == NULL && (t->ide == NULL)){
+		char c[9] = {'+','*','/','<','>','=','!',';'};
+	        char c2[9] = {'+','*','-','/','<','>','=','!',';'};
+	        
+	        if(!strstr(t->val,"e-"))
+  			strtok(t->val,c2);
+  		else
+  			strtok(t->val,c);
+	    	printf("CsteNb %s \n",t->val);
+	}
+	    	
+	else if (t->ide == NULL ){
+		if(strcmp(t->boo,"NaN"))
+			printf("CsteBo %s \n",t->boo); 
+	}
+	else if (t->boo == NULL )  {
+		
 		if(strstr(t->ide, "++")){
 			strtok(t->ide,"++");
 			printf("GetVar %s\n",t->ide);
