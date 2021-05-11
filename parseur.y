@@ -20,9 +20,11 @@
 %left '!'
 %nonassoc MOINSU
 
-%start programme
+%start resultat
 
 %%
+
+resultat : programme;
 
 programme: commande PT_VIRG
 	| commande PT_VIRG programme 

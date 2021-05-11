@@ -18,8 +18,12 @@ int main(int argc, char *argv[]){
 		  yyin = tmp;
 		 
 	  }
-	  yyparse();
-	  printf("Parsing:: syntax OK\n"); /* reached if parsing folllows the grammar */
+	  //yyparse();
+	  //printf("Parsing:: syntax OK\n"); /* reached if parsing folllows the grammar */
+	  if (yyparse()==0) { /* yyparse calls yylex */
+		  printf("\nParsing:: syntax OK\n"); /* reached if parsing folllows the grammar */
+		  
+	  }
 	  fclose(tmp);
    }
    else{
