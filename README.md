@@ -1,6 +1,6 @@
-# Fragment c1.1
+# Fragment c1.2
 
-Réalisé par : Hajar BOUZIANE
+Réalisé par : Sohayla RABHI
 
 ## Description 
 
@@ -20,7 +20,11 @@ Réalisé par : Hajar BOUZIANE
   * un 'supérieur ou égale', 
   * un 'inférieur ou égale',
   * un incrémentation,
-  * un point virgule.
+  * un point virgule. 
+* une expression régulière associée à ces tokens ont été ajoutées.
+* une expression régulière a été créé pour des commentaires unilignes.
+* une autre expression régulière a été créé pour des commentaires multilignes.
+
 
 2. **parseur.y** :
 - on utilise %start car maintenant le non-terminal principal n'est plus expression mais programme.
@@ -52,42 +56,59 @@ Réalisé par : Hajar BOUZIANE
 - si l'on choisit d'exécuter avec un fichier, on crée un fichier avec le même nom mais avec l'extension .jsm 
 - affiche un message indiquant si la synthaxe de ce contenu est correcte ou non.
 
+
 6. **test.txt**:
-- fichier qui contient une expression JS à parser.
-- on a testé les expressions suivantes: 
 
-z=1+True<=!False\*hajar++\*true+0;hajar=boubou\*3;soso=hajar+3\*louise++;
+//z=1+True<=!False*hajar++*true+0;hajar=boubou*3;soso=hajar+3*louise;
+3;
+/* 
+ ** je suis un commentaire **
+ ++ je suis un commentaire **
+ // je suis un commentaire ++
+ ** je suis un commentaire 00
+ ** je suis un commentaire **
+ *****/
+ 6+m; // je suis un autre commentaire mais uniligne
+ 8+0;dksnvo=h;y++;
 
-- CsteNb 1.000000 
-- CsteBo True 
-- AddiNb
-- CsteBo False 
-- Not 
-- GetVar hajar
-- CstNb 1
-- AddiNb
-- SetVar hajar
-- MultNb
-- GetVar true
-- MultNb
-- CsteNb 0.000000 
-- AddiNb
-- LoEqNb
-- SetVar z 
-- GetVar boubou
-- CsteNb 3.000000 
-- MultNb
-- SetVar hajar 
-- GetVar hajar
-- CsteNb 3.000000 
-- GetVar louise
-- CstNb 1
-- AddiNb
-- SetVar louise
-- MultNb
-- AddiNb
-- SetVar soso 
-- Halt
+***
+
+lex::NOMBRE 3
+lex::PT_VIRG ;
+lex::NOMBRE 6
+lex::char +
+lex::IDENT m
+lex::PT_VIRG ;
+lex::NOMBRE 8
+lex::char +
+lex::NOMBRE 0
+lex::PT_VIRG ;
+lex::IDENT dksnvo
+lex::char =
+lex::IDENT h
+lex::PT_VIRG ;
+lex::IDENT y
+lex::INCRE ++
+lex::PT_VIRG ;
+
+Parsing:: syntax OK
+
+***
+
+CsteNb 3.000000 
+CsteNb 6.000000 
+GetVar m
+AddiNb
+CsteNb 8.000000 
+CsteNb 0.000000 
+AddiNb
+GetVar h
+SetVar dksnvo 
+GetVar y
+CstNb 1
+AddiNb
+SetVar y
+Halt
 
 
 ## Comment compiler et exécuter ?
