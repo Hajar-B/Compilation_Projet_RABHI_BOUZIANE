@@ -21,7 +21,7 @@ int main(int argc, char *argv[]){
 	  if (yyparse()==0) { /* yyparse calls yylex */
 		  printf("\nParsing:: syntax OK\n"); /* reached if parsing folllows the grammar */
 		  
-	  }
+	}
 	  fclose(tmp);
    }
    else{

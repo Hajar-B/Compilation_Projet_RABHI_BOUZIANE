@@ -1,4 +1,17 @@
 3;
+56e-89;
+.364;
+.364e5;
+.364e-5;
+23.568;
+346.78e53;
+346.78e-53;
+3/0;
+0/0;
+0./0;
+0/0.;
+0/.0;
+.0/0;
 /* 
  ** je suis un commentaire **
  ++ je suis un commentaire **
@@ -8,3 +21,4 @@
  *****/
  6+m; // je suis un autre commentaire mais uniligne
  8+0;dksnvo=h;y++;
+ 
