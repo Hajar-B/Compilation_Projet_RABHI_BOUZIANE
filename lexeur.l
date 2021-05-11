@@ -18,7 +18,9 @@
 "<="		{ printf("lex::LOEQ %s\n",yytext); return LOEQ; }
 "++"		{ printf("lex::INCRE %s\n",yytext); return INCRE; }
 ;		{ printf("lex::PT_VIRG %s\n",yytext); return PT_VIRG; }
-[\t\n]         { ; }/* ignore space, tab, and line return */
+[\t\n ]         { ; }/* ignore space, tab, and line return */
+"//"[^\n]* { ; }/* ignore space, tab, and line return */
+"/*"([^*]|"*"+[^*/])*"*"+"/" { ; }/* ignore space, tab, and line return */
 .              { printf("lex::char %s\n",yytext); return yytext[0]; } /* other one-char = token, ex.'+'*/
 
 %%
