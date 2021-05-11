@@ -46,7 +46,7 @@ void codeExtension(AST t, char* file);
 /* print postfix without file*/
 void code(AST t);
 
-/* fonction qui va déterminer l'opération pour la fonction code */
+/* fonction qui va déterminer l'opération pour la fonction code */ 
 void affichage(AST t);
 
 /* print an AST*/
