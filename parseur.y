@@ -10,7 +10,7 @@
 
 
 %token NOMBRE FLOAT BOOLEAN 
-%token PT_VIRG EQUALS NOTEQL GREQ LOEQ
+%token PT_VIRG EQUALS NOTEQL GREQ LOEQ INCRE
 %token IDENT
 
 %left '='
@@ -18,6 +18,7 @@
 %left '+' '-'
 %left '*' '/'
 %left '!'
+%left INCRE
 %nonassoc MOINSU
 
 %start resultat
@@ -53,6 +54,7 @@ expression:
 	| FLOAT
 	| BOOLEAN
 	| IDENT
+	| IDENT INCRE
 	;
 %%
 

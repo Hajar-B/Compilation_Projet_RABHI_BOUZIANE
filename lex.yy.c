@@ -787,7 +787,7 @@ YY_RULE_SETUP
 case 9:
 YY_RULE_SETUP
 #line 19 "lexeur.l"
-{ printf("lex::INCRE %s\n", yytext); return INCRE; }
+{ printf("lex::INCRE %s\n",yytext); return INCRE; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP

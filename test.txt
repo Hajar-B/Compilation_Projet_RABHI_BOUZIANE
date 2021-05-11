@@ -1,2 +1,1 @@
-z=1+True<=!False++*hajar*true+0;hajar=boubou*3;soso=hajar+3*louise;
-
+y++;y=x++;
