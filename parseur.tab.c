@@ -119,9 +119,9 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    NOMBRE = 258,
-    FLOAT = 259,
-    BOOLEAN = 260,
+    NUMBER = 258,
+    BOOLEAN = 259,
+    NAN = 260,
     PT_VIRG = 261,
     EQUALS = 262,
     NOTEQL = 263,
@@ -508,9 +508,9 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    28,    28,    31,    32,    35,    36,    40,    41,    42,
-      43,    44,    45,    46,    47,    48,    49,    50,    51,    52,
-      53,    54,    55,    56
+       0,    27,    27,    30,    31,    34,    35,    39,    40,    41,
+      42,    43,    44,    45,    46,    47,    48,    49,    50,    51,
+      52,    53,    54,    55
 };
 #endif
 
@@ -519,7 +519,7 @@ static const yytype_int8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "NOMBRE", "FLOAT", "BOOLEAN", "PT_VIRG",
+  "$end", "error", "$undefined", "NUMBER", "BOOLEAN", "NAN", "PT_VIRG",
   "EQUALS", "NOTEQL", "GREQ", "LOEQ", "INCRE", "IDENT", "'='", "'<'",
   "'>'", "'+'", "'-'", "'*'", "'/'", "'!'", "MOINSU", "'('", "')'",
   "$accept", "resultat", "programme", "commande", "expression", YY_NULLPTR
@@ -563,8 +563,8 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,    20,    21,    22,    23,     0,     0,     0,     0,     2,
-       3,     0,     0,    23,    12,    19,     0,     1,     4,     5,
+       0,    20,    21,    23,    22,     0,     0,     0,     0,     2,
+       3,     0,     0,    22,    12,    19,     0,     1,     4,     5,
        0,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,    11,    13,    14,    15,    17,    18,    16,     7,     8,
        9,    10,     6
@@ -1565,7 +1565,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 58 "parseur.y"
+#line 57 "parseur.y"
 
 
 #include <stdio.h>        /* printf */

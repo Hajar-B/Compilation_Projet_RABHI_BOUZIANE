@@ -8,8 +8,8 @@
 
 %%
 
-0|[1-9][0-9]*  { printf("lex::NOMBRE %s\n",yytext); return NOMBRE; }
-(0|[1-9][0-9]*)"."[0-9]* { printf("lex::FLOAT %s\n",yytext); return FLOAT; }
+([^"/0"]|"0"?("."0*)?)"/"((".")?"0"|"0"("."0*)) { printf("lex::NAN %s\n",yytext); return NAN; }
+(0|[1-9][0-9]*)(("."[0-9]*)?("e"-?[0-9]+)?)|("."[0-9]+)("e"-?[0-9]+)? { printf("lex::NUMBER %s\n",yytext); return NUMBER; }
 [a-z][0-9,A-Z,a-z,_]* { printf("lex::IDENT %s\n",yytext); return IDENT; }
 "True"|"False" { printf("lex::BOOLEAN %s\n",yytext); return BOOLEAN; }
 ==		{ printf("lex::EQUALS %s\n",yytext); return EQUALS; }
@@ -24,3 +24,6 @@
 .              { printf("lex::char %s\n",yytext); return yytext[0]; } /* other one-char = token, ex.'+'*/
 
 %%
+
+
+

@@ -49,9 +49,9 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    NOMBRE = 258,
-    FLOAT = 259,
-    BOOLEAN = 260,
+    NUMBER = 258,
+    BOOLEAN = 259,
+    NAN = 260,
     PT_VIRG = 261,
     EQUALS = 262,
     NOTEQL = 263,

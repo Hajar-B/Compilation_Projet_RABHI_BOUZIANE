@@ -8,8 +8,7 @@
 	int yyerror(const char*);/* same for bison */
 %}
 
-
-%token NOMBRE FLOAT BOOLEAN 
+%token NUMBER BOOLEAN NAN
 %token PT_VIRG EQUALS NOTEQL GREQ LOEQ INCRE
 %token IDENT
 
@@ -50,10 +49,10 @@ expression:
 	|expression LOEQ expression   
 	|expression '<' expression    
 	|'!'expression			
-	| NOMBRE 
-	| FLOAT
+	| NUMBER
 	| BOOLEAN
 	| IDENT
+	| NAN
 	;
 %%
 
