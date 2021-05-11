@@ -57,8 +57,9 @@ extern int yydebug;
     NOTEQL = 263,
     GREQ = 264,
     LOEQ = 265,
-    IDENT = 266,
-    MOINSU = 267
+    INCRE = 266,
+    IDENT = 267,
+    MOINSU = 268
   };
 #endif
 
