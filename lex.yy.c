@@ -351,8 +351,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 16
-#define YY_END_OF_BUFFER 17
+#define YY_NUM_RULES 15
+#define YY_END_OF_BUFFER 16
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -362,10 +362,10 @@ struct yy_trans_info
 	};
 static const flex_int16_t yy_accept[41] =
     {   0,
-        0,    0,   17,   15,   11,   11,   15,   15,   15,    1,
-        1,   10,   15,   15,   15,   15,   15,    3,    6,    9,
-        0,   13,    2,    1,    8,    5,    7,    0,    0,    3,
-        0,    0,   13,    2,    0,    0,   14,    0,    4,    0
+        0,    0,   16,   14,   11,   11,   14,   14,   14,    1,
+        1,   10,   14,   14,   14,   14,   14,    3,    6,    9,
+        0,   12,    2,    1,    8,    5,    7,    0,    0,    3,
+        0,    0,   12,    2,    0,    0,   13,    0,    4,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -809,30 +809,25 @@ YY_RULE_SETUP
 case 12:
 YY_RULE_SETUP
 #line 22 "lexeur.l"
-{ printf("lex::PT_VIRG %s\n",yytext); return PT_VIRG; }
+{ ; }/* ignore space, tab, and line return */
 	YY_BREAK
 case 13:
+/* rule 13 can match eol */
 YY_RULE_SETUP
 #line 23 "lexeur.l"
 { ; }/* ignore space, tab, and line return */
 	YY_BREAK
 case 14:
-/* rule 14 can match eol */
 YY_RULE_SETUP
 #line 24 "lexeur.l"
-{ ; }/* ignore space, tab, and line return */
+{ printf("lex::char %s\n",yytext); return yytext[0]; } /* other one-char = token, ex.'+'*/
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 25 "lexeur.l"
-{ printf("lex::char %s\n",yytext); return yytext[0]; } /* other one-char = token, ex.'+'*/
-	YY_BREAK
-case 16:
-YY_RULE_SETUP
-#line 27 "lexeur.l"
+#line 26 "lexeur.l"
 ECHO;
 	YY_BREAK
-#line 836 "lex.yy.c"
+#line 831 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1837,6 +1832,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 27 "lexeur.l"
+#line 26 "lexeur.l"
 
 
