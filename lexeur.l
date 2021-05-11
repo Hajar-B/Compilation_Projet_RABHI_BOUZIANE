@@ -8,7 +8,7 @@
 
 %%
 
-([^"/0"]|"0"?("."0*)?)"/"((".")?"0"|"0"("."0*)) { printf("lex::NAN %s\n",yytext); return NAN; }
+([a-z,A-Z,0-9,_]*|"0"?("."0*)?)"/"((".")?"0"|"0"("."0*)) { printf("lex::NAN %s\n",yytext); return NAN; }
 (0|[1-9][0-9]*)(("."[0-9]*)?("e"-?[0-9]+)?)|("."[0-9]+)("e"-?[0-9]+)? { printf("lex::NUMBER %s\n",yytext); return NUMBER; }
 [a-z][0-9,A-Z,a-z,_]* { printf("lex::IDENT %s\n",yytext); return IDENT; }
 "True"|"False" { printf("lex::BOOLEAN %s\n",yytext); return BOOLEAN; }
