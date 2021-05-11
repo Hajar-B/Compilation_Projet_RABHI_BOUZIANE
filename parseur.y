@@ -20,16 +20,18 @@
 %left '!'
 %nonassoc MOINSU
 
-%start programme
+%start resultat
 
 %%
 
-programme: commande PT_VIRG
-	| commande PT_VIRG programme 
+resultat : programme;
+
+programme: commande 
+	| commande programme 
 	;
 
-commande: expression 
-	| IDENT '=' expression
+commande: expression PT_VIRG
+	| IDENT '=' expression PT_VIRG
 	;
 
 expression:
