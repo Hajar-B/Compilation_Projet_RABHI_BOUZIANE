@@ -54,7 +54,6 @@ expression:
 	| FLOAT
 	| BOOLEAN
 	| IDENT
-	| IDENT INCRE
 	;
 %%
 
