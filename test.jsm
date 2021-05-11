@@ -1,27 +1,14 @@
-CsteNb 1.000000 
-CsteBo True 
+CsteNb 3.000000 
+CsteNb 6.000000 
+GetVar m
 AddiNb
-CsteBo False 
-Not 
-GetVar hajar
-CstNb 1
-AddiNb
-SetVar hajar
-MultNb
-GetVar true
-MultNb
+CsteNb 8.000000 
 CsteNb 0.000000 
 AddiNb
-LoEqNb
-SetVar z 
-GetVar boubou
-CsteNb 3.000000 
-MultNb
-SetVar hajar 
-GetVar hajar
-CsteNb 3.000000 
-GetVar louise
-MultNb
+GetVar h
+SetVar dksnvo 
+GetVar y
+CstNb 1
 AddiNb
-SetVar soso 
+SetVar y
 Halt

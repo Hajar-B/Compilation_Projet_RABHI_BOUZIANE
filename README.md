@@ -1,12 +1,15 @@
-# Fragment c1.1
+# Fragment c1.2
 
-Réalisé par : Hajar BOUZIANE
+Réalisé par : Sohayla RABHI
 
 ## Description 
 
 1. **lexeur.l** : 
 - le fichier *parseur.tab.h* est inclu car il permet de définir les tokens NOMBRE, FLOAT, IDENT, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, INCRE et PT_VIRG. 
 - une expression régulière associée à ces tokens ont été ajoutées.
+- une expression régulière a été créé pour des commentaires unilignes.
+- une autre expression régulière a été créé pour des commentaires multilignes.
+
 
 2. **parseur.y** :
 - on utilise %start car maintenant le non-terminal principal n'est plus expression mais programme.
@@ -19,15 +22,38 @@ Réalisé par : Hajar BOUZIANE
 
 3. **test.txt**:
 
-True++; => error
+3;
+/* 
+ ** je suis un commentaire **
+ ++ je suis un commentaire **
+ // je suis un commentaire ++
+ ** je suis un commentaire 00
+ ** je suis un commentaire **
+ *****/
+ 6+m; // je suis un autre commentaire mais uniligne
+ 8+0;dksnvo=h;y++;
 
-(3==False)++; => error
+***
 
-!x++; => ok
+lex::NOMBRE 3
+lex::PT_VIRG ;
+lex::NOMBRE 6
+lex::char +
+lex::IDENT m
+lex::PT_VIRG ;
+lex::NOMBRE 8
+lex::char +
+lex::NOMBRE 0
+lex::PT_VIRG ;
+lex::IDENT dksnvo
+lex::char =
+lex::IDENT h
+lex::PT_VIRG ;
+lex::IDENT y
+lex::INCRE ++
+lex::PT_VIRG ;
 
-3+(toto++)<=0.; => ok
-
-y++;y=x++; => ok
+Parsing:: syntax OK
 
 
 ## Comment compiler et exécuter ?
