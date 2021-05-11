@@ -15,7 +15,6 @@ extern int yy_scan_string(const char *);
 int main(int argc, char *argv[]){
   FILE* tmp;
   AST t; 				/* &t allows to modifie the tree */
-  //tmp = fopen(argv[1],"r+");
   
   if( argc == 2){
 	  if((tmp = fopen(argv[1],"r")) != NULL){

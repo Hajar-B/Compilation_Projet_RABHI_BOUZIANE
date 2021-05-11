@@ -4,7 +4,7 @@
 /* unary-and-binary tree structure */
 struct _tree {
   char* car;                    /* char for arithmetic operation */
-  float val;			/* float  for value */
+  char* val;			/* float  for value */
   char* boo;
   char* ide;
   struct _tree* left;    	/* used for unary node but NULL if leaf */
@@ -26,7 +26,7 @@ AST newUnaryASTide(char* ide, char* incre);
 AST newBinaryASTide(char* car, char* ide, AST son);
 
 /* create an AST leaf from a value */
-AST newLeafAST(float val);
+AST newLeafAST(char* val);
 
 /* create an AST leaf from a value */
 AST newLeafASTb(char* chaine);

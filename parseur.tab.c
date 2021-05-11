@@ -122,10 +122,10 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    NOMBRE = 258,
-    FLOAT = 259,
-    BOOLEAN = 260,
-    IDENT = 261,
+    NUMBER = 258,
+    BOOLEAN = 259,
+    IDENT = 260,
+    NAN = 261,
     PT_VIRG = 262,
     EQUALS = 263,
     NOTEQL = 264,
@@ -143,12 +143,11 @@ union YYSTYPE
 #line 19 "parseur.y"
 
   struct _tree* exp;
-  int num;
-  double numf;
+  char* numf;
   char* boo;
   char* ide;
 
-#line 152 "parseur.tab.c"
+#line 151 "parseur.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -535,7 +534,7 @@ static const yytype_int8 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "NOMBRE", "FLOAT", "BOOLEAN", "IDENT",
+  "$end", "error", "$undefined", "NUMBER", "BOOLEAN", "IDENT", "NAN",
   "PT_VIRG", "EQUALS", "NOTEQL", "GREQ", "LOEQ", "INCRE", "'='", "'<'",
   "'>'", "'+'", "'-'", "'*'", "'/'", "'!'", "MOINSU", "'('", "')'",
   "$accept", "resultat", "programme_ast", "commande_ast", "expression", YY_NULLPTR
@@ -567,7 +566,7 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       9,   -14,   -14,   -14,    -3,    29,    29,    29,     7,   -14,
+       9,   -14,   -14,    -3,   -14,    29,    29,    29,     7,   -14,
        9,    61,   -14,    29,    -1,   -14,   -14,    44,   -14,   -14,
      -14,    29,    29,    29,    29,    29,    29,    29,    29,    29,
       29,    74,   -14,   -13,   -13,   -13,   -13,   -13,   -13,    18,
@@ -579,8 +578,8 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,    20,    21,    22,    23,     0,     0,     0,     0,     2,
-       3,     0,    24,     0,    23,    12,    19,     0,     1,     4,
+       0,    20,    21,    22,    24,     0,     0,     0,     0,     2,
+       3,     0,    23,     0,    22,    12,    19,     0,     1,     4,
        5,     0,     0,     0,     0,     0,     0,     0,     0,     0,
        0,     0,    11,    13,    14,    15,    17,    18,    16,     7,
        8,     9,    10,     6
@@ -606,7 +605,7 @@ static const yytype_int8 yytable[] =
       15,    16,    17,    27,    28,    29,    30,    18,    31,    12,
       13,    12,     1,     2,     3,     4,    33,    34,    35,    36,
       37,    38,    39,    40,    41,    42,     5,    19,     0,     6,
-       0,     7,     1,     2,     3,    14,    29,    30,     0,     0,
+       0,     7,     1,     2,    14,     4,    29,    30,     0,     0,
        0,     0,     0,     0,     0,     0,     5,     0,     0,     6,
        0,     7,    21,    22,    23,    24,     0,     0,    25,    26,
       27,    28,    29,    30,     0,     0,     0,    32,    20,    21,
@@ -634,7 +633,7 @@ static const yytype_int8 yycheck[] =
 static const yytype_int8 yystos[] =
 {
        0,     3,     4,     5,     6,    17,    20,    22,    25,    26,
-      27,    28,    12,    13,     6,    28,    28,    28,     0,    26,
+      27,    28,    12,    13,     5,    28,    28,    28,     0,    26,
        7,     8,     9,    10,    11,    14,    15,    16,    17,    18,
       19,    28,    23,    28,    28,    28,    28,    28,    28,    28,
       28,    28,    28,     7
@@ -653,7 +652,7 @@ static const yytype_int8 yyr2[] =
 {
        0,     2,     1,     1,     2,     2,     4,     3,     3,     3,
        3,     3,     2,     3,     3,     3,     3,     3,     3,     2,
-       1,     1,     1,     1,     2
+       1,     1,     1,     2,     1
 };
 
 
@@ -1353,143 +1352,143 @@ yyreduce:
   case 2:
 #line 45 "parseur.y"
                          { *pT = (yyvsp[0].exp); }
-#line 1357 "parseur.tab.c"
+#line 1356 "parseur.tab.c"
     break;
 
   case 3:
 #line 47 "parseur.y"
                                       { (yyval.exp) = (yyvsp[0].exp); }
-#line 1363 "parseur.tab.c"
+#line 1362 "parseur.tab.c"
     break;
 
   case 4:
 #line 48 "parseur.y"
                                      { (yyval.exp) = newBinaryAST("prog",(yyvsp[-1].exp),(yyvsp[0].exp));}
-#line 1369 "parseur.tab.c"
+#line 1368 "parseur.tab.c"
     break;
 
   case 5:
 #line 50 "parseur.y"
                                                 { (yyval.exp) = (yyvsp[-1].exp); }
-#line 1375 "parseur.tab.c"
+#line 1374 "parseur.tab.c"
     break;
 
   case 6:
 #line 51 "parseur.y"
                                        { (yyval.exp) = newBinaryASTide("=",(yyvsp[-3].ide),(yyvsp[-1].exp)); }
-#line 1381 "parseur.tab.c"
+#line 1380 "parseur.tab.c"
     break;
 
   case 7:
 #line 55 "parseur.y"
                                 { (yyval.exp) = newBinaryAST("+",(yyvsp[-2].exp),(yyvsp[0].exp)); }
-#line 1387 "parseur.tab.c"
+#line 1386 "parseur.tab.c"
     break;
 
   case 8:
 #line 56 "parseur.y"
                                 { (yyval.exp) = newBinaryAST("-",(yyvsp[-2].exp),(yyvsp[0].exp)); }
-#line 1393 "parseur.tab.c"
+#line 1392 "parseur.tab.c"
     break;
 
   case 9:
 #line 57 "parseur.y"
                                 { (yyval.exp) = newBinaryAST("*",(yyvsp[-2].exp),(yyvsp[0].exp)); }
-#line 1399 "parseur.tab.c"
+#line 1398 "parseur.tab.c"
     break;
 
   case 10:
 #line 58 "parseur.y"
                                 { (yyval.exp) = newBinaryAST("/",(yyvsp[-2].exp),(yyvsp[0].exp)); }
-#line 1405 "parseur.tab.c"
+#line 1404 "parseur.tab.c"
     break;
 
   case 11:
 #line 59 "parseur.y"
                                  { (yyval.exp) = (yyvsp[-1].exp); }
-#line 1411 "parseur.tab.c"
+#line 1410 "parseur.tab.c"
     break;
 
   case 12:
 #line 60 "parseur.y"
                                 { (yyval.exp) = newUnaryAST("-",(yyvsp[0].exp)); }
-#line 1417 "parseur.tab.c"
+#line 1416 "parseur.tab.c"
     break;
 
   case 13:
 #line 61 "parseur.y"
                                 { (yyval.exp) = newBinaryAST("==",(yyvsp[-2].exp),(yyvsp[0].exp)); }
-#line 1423 "parseur.tab.c"
+#line 1422 "parseur.tab.c"
     break;
 
   case 14:
 #line 62 "parseur.y"
                                 { (yyval.exp) = newBinaryAST("!=",(yyvsp[-2].exp),(yyvsp[0].exp)); }
-#line 1429 "parseur.tab.c"
+#line 1428 "parseur.tab.c"
     break;
 
   case 15:
 #line 63 "parseur.y"
                                  { (yyval.exp) = newBinaryAST(">=",(yyvsp[-2].exp),(yyvsp[0].exp)); }
-#line 1435 "parseur.tab.c"
+#line 1434 "parseur.tab.c"
     break;
 
   case 16:
 #line 64 "parseur.y"
                                  { (yyval.exp) = newBinaryAST(">",(yyvsp[-2].exp),(yyvsp[0].exp)); }
-#line 1441 "parseur.tab.c"
+#line 1440 "parseur.tab.c"
     break;
 
   case 17:
 #line 65 "parseur.y"
                                 { (yyval.exp) = newBinaryAST("<=",(yyvsp[-2].exp),(yyvsp[0].exp)); }
-#line 1447 "parseur.tab.c"
+#line 1446 "parseur.tab.c"
     break;
 
   case 18:
 #line 66 "parseur.y"
                                 { (yyval.exp) = newBinaryAST("<",(yyvsp[-2].exp),(yyvsp[0].exp)); }
-#line 1453 "parseur.tab.c"
+#line 1452 "parseur.tab.c"
     break;
 
   case 19:
 #line 67 "parseur.y"
                                  { (yyval.exp) = newUnaryAST("!",(yyvsp[0].exp)); }
-#line 1459 "parseur.tab.c"
+#line 1458 "parseur.tab.c"
     break;
 
   case 20:
 #line 68 "parseur.y"
-                                 { (yyval.exp) = newLeafAST((yyvsp[0].num)); }
-#line 1465 "parseur.tab.c"
+                                 { (yyval.exp) = newLeafAST((yyvsp[0].numf)); }
+#line 1464 "parseur.tab.c"
     break;
 
   case 21:
 #line 69 "parseur.y"
-                                 { (yyval.exp) = newLeafAST((yyvsp[0].numf)); }
-#line 1471 "parseur.tab.c"
+                                 { (yyval.exp) = newLeafASTb((yyvsp[0].boo)); }
+#line 1470 "parseur.tab.c"
     break;
 
   case 22:
 #line 70 "parseur.y"
-                                 { (yyval.exp) = newLeafASTb((yyvsp[0].boo)); }
-#line 1477 "parseur.tab.c"
+                                 { (yyval.exp) = newLeafASTide((yyvsp[0].ide)); }
+#line 1476 "parseur.tab.c"
     break;
 
   case 23:
 #line 71 "parseur.y"
-                                 { (yyval.exp) = newLeafASTide((yyvsp[0].ide)); }
-#line 1483 "parseur.tab.c"
+                         { (yyval.exp) = newUnaryASTide((yyvsp[-1].ide),"++");}
+#line 1482 "parseur.tab.c"
     break;
 
   case 24:
 #line 72 "parseur.y"
-                         { (yyval.exp) = newUnaryASTide((yyvsp[-1].ide),"++");}
-#line 1489 "parseur.tab.c"
+                         { (yyval.exp) = newLeafASTb((yyvsp[0].boo)); }
+#line 1488 "parseur.tab.c"
     break;
 
 
-#line 1493 "parseur.tab.c"
+#line 1492 "parseur.tab.c"
 
       default: break;
     }

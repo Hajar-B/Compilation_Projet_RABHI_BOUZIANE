@@ -18,8 +18,7 @@
 
 %union {
   struct _tree* exp;
-  int num;
-  double numf;
+  char* numf;
   char* boo;
   char* ide;
 } ;
@@ -27,7 +26,7 @@
 %type  <exp> expression
 %type  <exp> programme_ast
 %type  <exp> commande_ast
-%token <num>NOMBRE <numf>FLOAT <boo>BOOLEAN <ide>IDENT
+%token <numf>NUMBER <boo>BOOLEAN <boo>NAN <ide>IDENT
 %token PT_VIRG EQUALS NOTEQL GREQ LOEQ INCRE
 
 %left '='
@@ -41,6 +40,7 @@
 %start resultat
 
 %%
+
 
 resultat : programme_ast { *pT = $1; };
 
@@ -65,11 +65,11 @@ expression:
   |expression LOEQ expression   { $$ = newBinaryAST("<=",$1,$3); }
   |expression '<' expression    { $$ = newBinaryAST("<",$1,$3); }
   |'!'expression		 { $$ = newUnaryAST("!",$2); } 
-  | NOMBRE			 { $$ = newLeafAST($1); } 
-  | FLOAT			 { $$ = newLeafAST($1); } 
+  | NUMBER			 { $$ = newLeafAST($1); } 
   | BOOLEAN			 { $$ = newLeafASTb($1); } 
   | IDENT			 { $$ = newLeafASTide($1); }
   | IDENT INCRE		 { $$ = newUnaryASTide($1,"++");}
+  | NAN			 { $$ = newLeafASTb($1); }
   ;
 
 %%
