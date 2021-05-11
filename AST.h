@@ -21,6 +21,8 @@ AST newBinaryAST(char* car, AST left, AST right);
 /* create an AST from a root value and one AST son */
 AST newUnaryAST(char* car, AST son);
 
+AST newUnaryASTide(char* ide, char* incre);
+
 AST newBinaryASTide(char* car, char* ide, AST son);
 
 /* create an AST leaf from a value */

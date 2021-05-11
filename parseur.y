@@ -69,9 +69,8 @@ expression:
   | FLOAT			 { $$ = newLeafAST($1); } 
   | BOOLEAN			 { $$ = newLeafASTb($1); } 
   | IDENT			 { $$ = newLeafASTide($1); }
-  | expression INCRE
+  | IDENT INCRE		 { $$ = newUnaryASTide($1,"++");}
   ;
-
 
 %%
 
