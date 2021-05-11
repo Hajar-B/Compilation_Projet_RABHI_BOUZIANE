@@ -58,7 +58,8 @@ extern int yydebug;
     NOTEQL = 264,
     GREQ = 265,
     LOEQ = 266,
-    MOINSU = 267
+    INCRE = 267,
+    MOINSU = 268
   };
 #endif
 
@@ -74,7 +75,7 @@ union YYSTYPE
   char* boo;
   char* ide;
 
-#line 78 "parseur.tab.h"
+#line 79 "parseur.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

@@ -16,6 +16,7 @@
 !=		{ printf("lex::NOTEQL %s\n",yytext); return NOTEQL; }
 >=		{ printf("lex::GREQ %s\n",yytext); return GREQ; }
 "<="		{ printf("lex::LOEQ %s\n",yytext); return LOEQ; }
+"++"		{ printf("lex::INCRE %s\n", yytext); return INCRE; }
 ;		{ printf("lex::PT_VIRG %s\n",yytext); return PT_VIRG; }
 [\t\n]         { ; }/* ignore space, tab, and line return */
 .              { printf("lex::char %s\n",yytext); return yytext[0]; } /* other one-char = token, ex.'+'*/

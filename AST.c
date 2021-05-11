@@ -23,6 +23,10 @@ AST newUnaryAST(char* car, AST son)
   return newBinaryAST(car, son, NULL);
 }
 
+AST newUnaryASTide(char* ide, char* incre){
+	return newBinaryASTide(incre, ide, NULL);
+}
+
 /* create an AST from a root value, a variable and one AST son */
 AST newBinaryASTide(char* car, char* ide, AST son)
 {
@@ -108,13 +112,24 @@ void printAST(AST t)
 	    	printf(":%f: ",t->val);
 	}
 	else if (t->ide == NULL)
-		printf(":%s: ",t->boo);  
+		printf(":%s: ",t->boo); 
 	else{
-		char c[9] = {'+','*','-','/','<','>','=','!',';'};
-	 	char* ch = strtok(t->ide,c);
-	 	if(ch != NULL) printf(":%s: ",ch);
-	 	else printf(":%s: ",t->ide);
+		if(strstr(t->ide, "++")){
+			printf(":%s: ",t->ide);
+		}
+		else {
+			if(strstr(t->ide, "++")){
+				printf(":%s: ",t->ide);
+			}
+			else{
+			 	char c[9] = {'+','*','-','/','<','>','=','!',';'};
+			 	char* ch = strtok(t->ide,c);
+			 	if(ch != NULL) printf(":%s: ",ch);
+			 	else printf(":%s: ",t->ide);
+			 }
+		}
 	 } 
+	 
     }
     else if(t->ide != NULL && !t->val && t->boo == NULL){
     	printf(":%s: ",chaine(t->ide));
@@ -131,12 +146,11 @@ char* chaine(char* c){
 	for(int i = 0; i<strlen(c);i++){
 		if(c[i] != '='){
 			ch[i]=c[i];
-		}
-		else{ 
-			ch[i]=c[i];
+		}		
+		else{
+		 	ch[i]=c[i];
 			return ch;
 		}
-		
 	}
 	return ch;
 }
@@ -164,13 +178,21 @@ void codeExtension(AST t, char* file){
     }
    
     if(t->left == NULL){
-	    if(t->boo == NULL && (t->ide == NULL))
-		fprintf(fichier,"CsteNb %f \n",t->val);
-	    else if (t->ide == NULL)
+    	if(t->boo == NULL && (t->ide == NULL))
+		  fprintf(fichier,"CsteNb %f \n",t->val);
+	else if (t->ide == NULL)
 		fprintf(fichier,"CsteBo %s \n",t->boo);
-	    else if (t->boo == NULL)  
-		fprintf(fichier,"GetVar %s \n",t->ide); 
-	 	
+	else if (t->boo == NULL) {
+		if(strstr(t->ide, "++")){
+			strtok(t->ide,"++");
+			fprintf(fichier,"GetVar %s\n",t->ide);
+			fprintf(fichier,"CstNb 1\n");
+			fprintf(fichier,"AddiNb\n");
+			fprintf(fichier,"SetVar %s\n", t->ide);
+		}
+		else
+			fprintf(fichier,"GetVar %s\n",t->ide); 
+	} 	
     } 
     else if (t->left != NULL && (t->right == NULL)){
     	if(strcmp(t->car, "-") == 0)
@@ -229,7 +251,17 @@ void code(AST t)
 	    	printf("CsteNb %f \n",t->val);
 	else if (t->ide == NULL)
 		printf("CsteBo %s \n",t->boo); 
-	else if (t->boo == NULL)  printf("GetVar %s \n",t->ide);  
+	else if (t->boo == NULL)  {
+		if(strstr(t->ide, "++")){
+			strtok(t->ide,"++");
+			printf("GetVar %s\n",t->ide);
+			printf("CstNb 1\n");
+			printf("AddiNb\n");
+			printf("SetVar %s\n", t->ide);
+		}
+		else
+			printf("GetVar %s \n",t->ide);
+	}
     } 	  
     else if (t->left != NULL && (t->right == NULL)){
     	if(strcmp(t->car, "-") == 0)

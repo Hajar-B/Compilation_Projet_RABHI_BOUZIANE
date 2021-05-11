@@ -28,13 +28,14 @@
 %type  <exp> programme_ast
 %type  <exp> commande_ast
 %token <num>NOMBRE <numf>FLOAT <boo>BOOLEAN <ide>IDENT
-%token PT_VIRG EQUALS NOTEQL GREQ LOEQ
+%token PT_VIRG EQUALS NOTEQL GREQ LOEQ INCRE
 
 %left '='
 %left EQUALS NOTEQL LOEQ '<' GREQ '>' 
 %left '+' '-'
 %left '*' '/'
 %left '!'
+%left INCRE
 %nonassoc MOINSU
 
 %start resultat
@@ -68,8 +69,8 @@ expression:
   | FLOAT			 { $$ = newLeafAST($1); } 
   | BOOLEAN			 { $$ = newLeafASTb($1); } 
   | IDENT			 { $$ = newLeafASTide($1); }
+  | IDENT INCRE		 { $$ = newUnaryASTide($1,"++");}
   ;
-
 
 %%
 
