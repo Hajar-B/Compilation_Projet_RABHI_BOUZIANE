@@ -10,7 +10,7 @@
 
 
 %token NOMBRE FLOAT BOOLEAN 
-%token PT_VIRG EQUALS NOTEQL GREQ LOEQ INCRE
+%token PT_VIRG EQUALS NOTEQL GREQ LOEQ
 %token IDENT
 
 %left '='
@@ -18,7 +18,6 @@
 %left '+' '-'
 %left '*' '/'
 %left '!'
-%left INCRE
 %nonassoc MOINSU
 
 %start resultat
@@ -27,6 +26,7 @@
 
 resultat : programme
 	;
+	
 programme: commande
 	| commande programme 
 	;
@@ -53,7 +53,6 @@ expression:
 	| FLOAT
 	| BOOLEAN
 	| IDENT
-	| expression INCRE
 	;
 %%
 
