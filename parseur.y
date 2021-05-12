@@ -34,6 +34,8 @@ programme: commande
 
 commande: expression PT_VIRG
 	| IDENT '=' expression PT_VIRG
+	| PT_VIRG
+	| '{'programme'}'
 	| IF '('expression')' commande ELSE commande 
 	;
 
