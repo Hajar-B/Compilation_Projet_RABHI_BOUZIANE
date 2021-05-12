@@ -1,19 +1,21 @@
-# Fragment c1.3
+# Fragment c2.0
 
-Réalisé par : Hajar BOUZIANE
+Réalisé par : Sohayla RABHI
 
 ## Description 
 
 1. **lexeur.l** : 
-* le fichier *parseur.tab.h* est inclu car il permet de définir les tokens NAN, NUMBER, IDENT, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, INCRE et PT_VIRG. 
+* le fichier *parseur.tab.h* est inclu car il permet de définir les tokens NAN, NUMBER, IDENT, BOOLEAN, IF, ELSE, EQUALS, NOTEQL, GREQ, LOEQ, INCRE et PT_VIRG. 
 * On a ajouté un type char* pour notre token NUMBER
 * On a ajouté un type char* pour nos tokens BOOLEAN et NAN
 * On a ajouté un type char* pour notre token IDENT
 * Pour chaque expression régulière, on renvoie le token qui lui est associé. Les expressions régulières reconnaîssent :
-  * un 'Not a Number'
+  * un 'Not a Number',
   * un number, 
   * une variable,
   * un booléen,
+  * un 'If',
+  * un 'Else",
   * une égalité,
   * une inégalité, 
   * un 'supérieur ou égale', 
@@ -27,17 +29,20 @@ Réalisé par : Hajar BOUZIANE
 2. **parseur.y** :
 - on utilise %start car maintenant le non-terminal principal n'est plus expression mais programme.
 - on définit trois types : un type expression, un type programme_ast et un autre type commande_ast (non-terminaux). En d'autres termes ces non-terminaux vont construire un AST de *exp*.
-- on définit 10 tokens : NAN, NUMBER, IDENT, BOOLEAN, EQUALS, NOTEQL, GREQ, LOEQ, INCRE et PT_VIRG. Notons que les opérations "==", "!=", "<=", ">=" et "++" sont des multisymboles d'où la création de leur token.
+- on définit 12 tokens : NAN, NUMBER, IDENT, BOOLEAN, IF, ELSE, EQUALS, NOTEQL, GREQ, LOEQ, INCRE et PT_VIRG. Notons que les opérations "==", "!=", "<=", ">=" et "++" sont des multisymboles d'où la création de leur token.
 - on définit les règles d'associativité gauche grâce au %left.
 - on définit les règles de priorités : L'affection '=' est définie en premier car elle est moins prioritaire que toutes les autres opérations. Les opérations booléennes sont définies en deuxième. S'en suit du '+' et du '-' car ils sont moins prioritaires que le '*' et le '/' (que l'on a donc défini dans un troisième temps). Comme le '++' est prioritaire sur toutes les précédentes opérations, il a été défini après le '!'.
 - on définit une balise MOINSU pour sigifier qu'il a une autre priorité que la soustraction '-'.
+- on définit une nouvelle ligne à notre non-terminal commande qui décrit une condition If Else.
 - on a ajouté un noeud prog, pour y spécifier dans l'AST les suites de commandes. 
-- par conséquent, on a mis à jour la grammaire.
+
 
 3. **AST.h**:
 - on a modifié le type du champ val pour que ce ne soit plus des entiers mais uniquement des flottants.
 - on a ajouté un champ *boo* à la structure de notre AST qui fera référence aux booléens.
-- on a également ajouté un champ *ide* à la structure de notre AST qui fera référence aux variables.
+- on a ajouté un champ *ide* à la structure de notre AST qui fera référence aux variables.
+on a également ajouté un champ *taille* à la structure de notre AST qui fera référence à la taille du code généré et qui sera utlisé pour les conditionnelles.
+
 
 4. **AST.c**:
 - suite à la précédente modification on a modifié les fonctions pour qu'elles affichent des flottants. 
@@ -47,6 +52,8 @@ Réalisé par : Hajar BOUZIANE
 - Une fonction newBinaryASTide(char* car, char* ide, AST son) a été ajouté, elle crée un arbre où la racine ne possède qu'un fils. Par exemple, pour l'expression y=x+1; la racine stockera le "y=" quand au fils il correspondra au sous arbre qui contiendra l'expression x+1.
 - Une autre fonction newLeafASTide(char* chaine) qui va créer la feuille qui contiendra une variable;
 - newUnaryASTide(char* ide, char* incre) a ensuite été ajouté. Elle permet de créer une feuille qui sera composée de l'opération "++" ainsi que de la variable qu'elle incrémente.
+- Pour toutes fonctions qui vont générer des feuilles on va initialiser la taille à 1. Il y a une spécificité pour l'opération d'incrémentation, on doit lui ajouter 4 lignes.
+- Pour les fonctions qui génèrent des arbres (avec un ou deux fils) on va initialiser la taille à : 1 + taille du fils gauche + taille du fils droit. Si l'un deux est NULL on lui donne la taille 0 dans cette formule. Lorsqu'on passe par un noeud qui est un 'IfElse' on décrémente de 1 car lorsqu'on crée un 'if_then_else' on crée un arbre bianire 'IfElse' qui est lui-même composé d'un arbre binaire 'If' et et d'un arbre unaire 'Else' ce qui ajoute 3 à la taille.
 
 5. **main.c**:
 - programme exécutable qui va parser le contenu d'un fichier.
@@ -57,76 +64,31 @@ Réalisé par : Hajar BOUZIANE
 
 6. **test.txt**:
 
-//oto
+If(x)If(y)y++;Elsey=y-1;Elsex=x-1;
 
-3;
+- Parsing:: syntax OK
 
-56e-89;
-
-.364;
-
-.364e5;
-
-.364e-5;
-
-23.568;
-
-346.78e53;
-
-346.78e-53;
-
-3/0;
-
-0/0;
-
-0./0;
-
-0/0.;
-
-0/.0;
-
-.0/0;
-
-/*
-
-** je suis un commentaire **
-
-++ je suis un commentaire **
-
-// je suis un commentaire ++
-
-** je suis un commentaire 00
-
-** je suis un commentaire **
-
-*****/
-
-6+m; // je suis un autre commentaire mais uniligne
-
-8+0;dksnvo=h;y++;
 
 *** 
 
-- CsteNb 3 
-- CsteNb 56e-89 
-- CsteNb .364 
-- CsteNb .364e5 
-- CsteNb .364e-5 
-- CsteNb 23.568 
-- CsteNb 346.78e53 
-- CsteNb 346.78e-53 
-- CsteNb 6 
-- GetVar m
-- AddiNb
-- CsteNb 8 
-- CsteNb 0 
-- AddiNb
-- GetVar h
-- SetVar dksnvo 
+- GetVar x
+- ConJmp 12 
+- GetVar y
+- ConJmp 5 
 - GetVar y
 - CstNb 1
 - AddiNb
 - SetVar y
+- Jump 4 
+- GetVar y
+- CsteNb 1 
+- SubiNb
+- SetVar y 
+- Jump 4 
+- GetVar x
+- CsteNb 1 
+- SubiNb
+- SetVar x 
 - Halt
 
 ## Comment compiler et exécuter ?

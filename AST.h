@@ -7,6 +7,7 @@ struct _tree {
   char* val;			/* float  for value */
   char* boo;
   char* ide;
+  int taille;
   struct _tree* left;    	/* used for unary node but NULL if leaf */
   struct _tree* right;   	/* NULL if unary node or leaf*/
 };

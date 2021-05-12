@@ -59,7 +59,9 @@ extern int yydebug;
     GREQ = 265,
     LOEQ = 266,
     INCRE = 267,
-    MOINSU = 268
+    IF = 268,
+    ELSE = 269,
+    MOINSU = 270
   };
 #endif
 
@@ -67,14 +69,14 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 19 "parseur.y"
+#line 20 "parseur.y"
 
   struct _tree* exp;
   char* numf;
   char* boo;
   char* ide;
 
-#line 78 "parseur.tab.h"
+#line 80 "parseur.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

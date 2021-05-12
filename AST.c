@@ -13,6 +13,17 @@ AST newBinaryAST(char* car, AST left, AST right)
     t->ide = NULL;
     t->left=left;
     t->right=right;
+    if(t->right != NULL)
+   	 t->taille = 1 + left->taille + right->taille;	 
+    else 
+    	t->taille = 1 + left->taille;
+   
+    if(t->right != NULL && t->right->car && !strcmp(t->right->car,"IfElse"))
+   	 t->taille -= 1; 
+    else if(t->left != NULL && t->left->car && !strcmp(t->left->car,"IfElse"))
+    	 t->taille -= 1;
+    
+    	 
   } else printf("MALLOC! ");
   return t;
 }
@@ -33,6 +44,13 @@ AST newBinaryASTide(char* car, char* ide, AST son)
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
   if (t!=NULL){
     t->ide = chaine(ide);
+    if(son != NULL)
+   	 t->taille = 1 + son->taille;
+    else{ 
+    	t->taille = 1;
+    	if(!strcmp(car,"++"))
+    		t->taille = 4;
+    }
     t->car=car;
     t->boo = NULL;
     t->left= son;
@@ -42,6 +60,7 @@ AST newBinaryASTide(char* car, char* ide, AST son)
 }
 
 
+
 /* create an AST leaf from a value */
 AST newLeafAST(char* val)
 {
@@ -49,6 +68,7 @@ AST newLeafAST(char* val)
   if (t!=NULL){	/* malloc ok */  
     t->val=chaine(val);
     t->car = NULL;
+    t->taille = 1;
     t->boo = NULL;
     t->ide = NULL;
     t->left=NULL;
@@ -68,6 +88,7 @@ AST newLeafASTb(char* chaine){
     	t->boo="False";
     else
     	t->boo="NaN";
+    t->taille = 1;
     t->ide=NULL;
     t->car=NULL;
     t->left=NULL;
@@ -81,10 +102,12 @@ AST newLeafASTide(char* chaine){
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
   if (t!=NULL){	
     t->boo = NULL;
-    char c[9] = {'+','*','-','/','<','>','=','!',';'};
+    char c[11] = {'+','*','-','/','<','>','=','!',';','(',')'};
     char* ch;
     ch = strtok(chaine,c);
     t->ide=ch;
+    
+    t->taille = 1;
     t->car=NULL;
     t->left=NULL;
     t->right=NULL;
@@ -176,13 +199,25 @@ On ferme le fichier.
 
 */ 
 void codeExtension(AST t, char* file){
-	FILE* fichier = NULL;
-	fichier = fopen(file,"a+");
-
-    if (t->left!=NULL){ 
+	
+	
+    if (t->left!=NULL){
+    	if(!strcmp(t->car,"Else")){
+	    	FILE* fichier = NULL;
+		fichier = fopen(file,"a+");
+	    	fprintf(fichier,"Jump %d \n",t->taille-1);
+	    	fclose(fichier);
+	}
     	codeExtension(t->left,file); 
+    	
     }
     if (t->right!=NULL){ 
+    	if(!strcmp(t->car,"If")){
+    	       FILE* fichier = NULL;
+	       fichier = fopen(file,"a+");
+	       fprintf(fichier,"ConJmp %d \n",t->taille-1);
+	       fclose(fichier);
+	} 
     	codeExtension(t->right,file);
     }
    
@@ -195,57 +230,122 @@ void codeExtension(AST t, char* file){
   			strtok(t->val,c2);
   		else
   			strtok(t->val,c);
+  		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
   		fprintf(fichier,"CsteNb %s \n",t->val);
+  		fclose(fichier);
     	}
 	else if (t->ide == NULL){
-		if(strcmp(t->boo,"NaN"))
+		if(strcmp(t->boo,"NaN")){
+			FILE* fichier = NULL;
+	        	fichier = fopen(file,"a+");
 			fprintf(fichier,"CsteBo %s \n",t->boo);
+			fclose(fichier);
+		}
 	}
 	else if (t->boo == NULL) {
 		if(strstr(t->ide, "++")){
 			strtok(t->ide,"++");
+			FILE* fichier = NULL;
+	        	fichier = fopen(file,"a+");
 			fprintf(fichier,"GetVar %s\n",t->ide);
 			fprintf(fichier,"CstNb 1\n");
 			fprintf(fichier,"AddiNb\n");
 			fprintf(fichier,"SetVar %s\n", t->ide);
+			fclose(fichier);
 		}
-		else
+		else{
+			FILE* fichier = NULL;
+	        	fichier = fopen(file,"a+");
 			fprintf(fichier,"GetVar %s\n",t->ide); 
+			fclose(fichier);
+		}
 	} 	
     } 
     else if (t->left != NULL && (t->right == NULL)){
-    	if(strcmp(t->car, "-") == 0)
+    	if(strcmp(t->car, "-") == 0){
+    		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
     		fprintf(fichier,"NegaNb \n");
-    	else if (strcmp(t->car, "!") == 0)
+    		fclose(fichier);
+    	}
+    	else if (strcmp(t->car, "!") == 0){
+    		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
     		fprintf(fichier,"Not \n");
+    		fclose(fichier);
+    	}
     	else if (!strcmp(t->car, "=") && t->ide != NULL) {
     		strtok(t->ide,"=");
-    		fprintf(fichier,"SetVar %s \n",t->ide); 
+    		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
+    		fprintf(fichier,"SetVar %s \n",t->ide);
+    		fclose(fichier); 
     	}
     } 
     else {
-    	if(!strcmp(t->car,"+"))
+    	if(!strcmp(t->car,"+")){
+    		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"AddiNb\n");
-	if(!strcmp(t->car,"*"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"*")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"MultNb\n");
-	if(!strcmp(t->car,"-"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"-")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"SubiNb\n");
-	if(!strcmp(t->car,"/"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"/")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"DiviNb\n");
-	if(!strcmp(t->car,"=="))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"==")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"Equals\n");
-	if(!strcmp(t->car,"!="))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"!=")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"NoEql\n");
-	if(!strcmp(t->car, ">="))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car, ">=")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"GrEqNb\n");
-	if(!strcmp(t->car,">"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,">")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"GrStNb\n");
-	if(!strcmp(t->car, "<="))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car, "<=")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"LoEqNb\n");
-	if(!strcmp(t->car,"<"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"<")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"LoStNb\n");
+		fclose(fichier);
+	}
     }
-    fclose(fichier);
+    
 }
 
 
@@ -259,13 +359,20 @@ On parcourt tout d'abord l'arbre en affichant le fils gauche puis droit puis la 
 */  
 void code(AST t)
 {	
-
+    
     if (t->left!=NULL){ 
-    	code(t->left); 
+    	//printf("car 2 %s \n",t->car);
+    	if(!strcmp(t->car,"Else"))
+	    	printf("Jump %d \n",t->taille-1); 
+    	code(t->left);
     }
     if (t->right!=NULL){ 
+    	if(!strcmp(t->car,"If"))
+	    	printf("ConJmp %d \n",t->taille-1); 
     	code(t->right);
+    	
     }
+    
     if(t->left == NULL){
 
 	if(t->boo == NULL && (t->ide == NULL)){
@@ -306,7 +413,10 @@ void code(AST t)
     		printf("SetVar %s \n",t->ide); 
     	}
     } 
-    else affichage(t);
+    else{ 
+    		affichage(t);
+    	
+    }
 }
 
 
