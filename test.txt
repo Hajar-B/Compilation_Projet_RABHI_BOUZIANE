@@ -1,4 +1,9 @@
-3;
+If(x<=y) 
+	x=3e-3; 
+Else 
+	y=-2;
+/*3;
+3e56;
 56e-89;
 .364;
 .364e5;
@@ -18,7 +23,6 @@
  // je suis un commentaire ++
  ** je suis un commentaire 00
  ** je suis un commentaire **
- *****/
  6+m; // je suis un autre commentaire mais uniligne
- 8+0;dksnvo=h;y++;
- 
+ 8+0;dksnvo=h;*/
+

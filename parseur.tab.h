@@ -59,7 +59,9 @@ extern int yydebug;
     LOEQ = 265,
     INCRE = 266,
     IDENT = 267,
-    MOINSU = 268
+    IF = 268,
+    ELSE = 269,
+    MOINSU = 270
   };
 #endif
 

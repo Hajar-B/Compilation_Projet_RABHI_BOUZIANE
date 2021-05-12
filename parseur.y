@@ -8,9 +8,9 @@
 	int yyerror(const char*);/* same for bison */
 %}
 
-%token NUMBER BOOLEAN NAN
+%token NUMBER BOOLEAN NAN 
 %token PT_VIRG EQUALS NOTEQL GREQ LOEQ INCRE
-%token IDENT
+%token IDENT IF ELSE
 
 %left '='
 %left EQUALS NOTEQL LOEQ '<' GREQ '>' 
@@ -29,10 +29,12 @@ resultat : programme
 	
 programme: commande
 	| commande programme 
+	
 	;
 
 commande: expression PT_VIRG
 	| IDENT '=' expression PT_VIRG
+	| IF '('expression')' commande ELSE commande 
 	;
 
 expression:
