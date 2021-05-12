@@ -1,6 +1,6 @@
-# Fragment p2.0
+# Fragment p2.1
 
-Réalisé par : Sohayla RABHI
+Réalisé par : Hajar BOUZIANE
 
 ## Description 
 
@@ -17,18 +17,16 @@ Réalisé par : Sohayla RABHI
 - on définit les règles d'associativité gauche grâce au %left.
 - on définit les règles de priorités : L'affection '=' est définie en premier car elle est moins prioritaire que toutes les autres opérations. Les opérations booléennes sont définies en deuxième. S'en suit du '+' et du '-' car ils sont moins prioritaires que le '*' et le '/' (que l'on a donc défini dans un troisième temps). Comme le '++' est prioritaire sur toutes les précédentes opérations, il a été défini après le '!'.
 - on définit une balise MOINSU pour sigifier qu'il a une autre priorité que la soustraction '-'.
-- on définit une nouvelle ligne à notre non-terminal commande qui décrit une condition If Else.
+- on définit deux nouvelles lignes à notre non-terminal 'commande':
+   * une qui décrit une condition If Else.
+   * une autre qui décrit une commande vide
+   * et enfin, une qui décrit un programme (une suite de commandes)
 - par conséquent, on a mis à jour la grammaire.
 
 
 3. **test.txt**:
 
-r=46;y=2e-3;If(r==y)y++;Elser=r-y;
-
-- Parsing:: syntax OK
-
-
-If(x<=y) x=3e-3; Else y=-2;
+If(x<=y){x=3e-3;If(c==y)y=x+0.1;Else{y++;}}Elsey=-2;
 
 - Parsing:: syntax OK
 
