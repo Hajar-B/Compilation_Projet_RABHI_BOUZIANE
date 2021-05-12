@@ -14,7 +14,6 @@
  int yyerror(struct _tree**, const char*); /* same for bison */
 %}
 
-<<<<<<< HEAD
 %parse-param {struct _tree* *pT} // yyparse(&t) call => *pT = *(&t) = t 
 
 %union {
@@ -48,21 +47,15 @@ resultat : programme_ast { *pT = $1; };
 programme_ast: commande_ast	      { $$ = $1; }
 	| commande_ast programme_ast { $$ = newBinaryAST("prog",$1,$2);}
 	;
-	
-commande: expression PT_VIRG
-	| IDENT '=' expression PT_VIRG
-	| PT_VIRG
-	| '{'programme'}'
-	| IF '('expression')' commande ELSE commande 
->>>>>>> parser
-	;
-commande_ast: expression PT_VIRG		{ $$ = $1; }
+
+commande_ast: expression PT_VIRG	{ $$ = $1; }
 	| IDENT '=' expression PT_VIRG { $$ = newBinaryASTide("=",$1,$3); } 
-	| PT_VIRG
-	| '{'programme'}'
-	| IF '('expression')' commande ELSE commande 
+	| PT_VIRG			{$$=newLeafAST(";"); }
+	| '{'programme_ast'}'		{$$ = $2;}
+	| IF '('expression')' commande_ast ELSE commande_ast {$$ = newBinaryAST("IfElse",newBinaryAST("If",$3,$5),newUnaryAST("Else",$7));}
 	;	
 
+	
 expression:
     expression '+' expression	{ $$ = newBinaryAST("+",$1,$3); }
   | expression '-' expression	{ $$ = newBinaryAST("-",$1,$3); }

@@ -13,10 +13,41 @@ AST newBinaryAST(char* car, AST left, AST right)
     t->ide = NULL;
     t->left=left;
     t->right=right;
+    /*
+    if(!t->left && !t->right)
+    	t->taille = 1;
+    else if(t->left && !t->right && strcmp(car, "IfElse")){
+   	if(!strcmp(car, "If"))
+   		t->taille = 1;
+   	else
+    		t->taille = 1 + left->taille;
+    	
+    }
+    else
+    	t->taille = 1 + left->taille + right->taille;*/
+   
   } else printf("MALLOC! ");
   return t;
 }
 
+
+
+
+ /*
+    if(t->right != NULL)
+    	if(!strcmp(t->car,"If") && strcmp(t->car,"IfElse")){
+	    	t->taille = 2 + right->taille;
+    	}
+   	else
+   		t->taille = 1 + left->taille + right->taille;	 
+    else 
+    	t->taille = 1 + left->taille;
+   
+    if(t->right != NULL && t->right->car && !strcmp(t->right->car,"IfElse"))
+   	 t->taille -= 1; 
+    else if(t->left != NULL && t->left->car && !strcmp(t->left->car,"IfElse"))
+    	 t->taille -= 1;   
+    */
 /* create an AST from a root value and one AST son */
 AST newUnaryAST(char* car, AST son)
 {
@@ -27,11 +58,20 @@ AST newUnaryASTide(char* ide, char* incre){
 	return newBinaryASTide(incre, ide, NULL);
 }
 
+/* create an AST from a root value, a variable and one AST son */
 AST newBinaryASTide(char* car, char* ide, AST son)
 {
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
   if (t!=NULL){
     t->ide = chaine(ide);
+    if(son != NULL)
+   	 t->taille = 1 + son->taille;
+    else{ 
+    	if(!strcmp(car,"++"))
+    		t->taille = 3;
+    	else
+    		t->taille = 1;
+    }
     t->car=car;
     t->boo = NULL;
     t->left= son;
@@ -41,6 +81,7 @@ AST newBinaryASTide(char* car, char* ide, AST son)
 }
 
 
+
 /* create an AST leaf from a value */
 AST newLeafAST(char* val)
 {
@@ -48,6 +89,8 @@ AST newLeafAST(char* val)
   if (t!=NULL){	/* malloc ok */  
     t->val=chaine(val);
     t->car = NULL;
+    if(strcmp(t->val,";"))
+        t->taille = 1;
     t->boo = NULL;
     t->ide = NULL;
     t->left=NULL;
@@ -60,13 +103,14 @@ AST newLeafAST(char* val)
 AST newLeafASTb(char* chaine){
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
   if (t!=NULL){	/* malloc ok */
-  
+ 
     if(strcmp(chaine,"True")==0)
     	t->boo="True";
     else if(strcmp(chaine,"False")==0)
     	t->boo="False";
     else
     	t->boo="NaN";
+    t->taille = 1;
     t->ide=NULL;
     t->car=NULL;
     t->left=NULL;
@@ -75,14 +119,16 @@ AST newLeafASTb(char* chaine){
   return t;
 }
 
+
 AST newLeafASTide(char* chaine){
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
   if (t!=NULL){	
     t->boo = NULL;
-    char c[9] = {'+','*','-','/','<','>','=','!',';'};
+    char c[11] = {'+','*','-','/','<','>','=','!',';','(',')'};
     char* ch;
     ch = strtok(chaine,c);
     t->ide=ch;
+    t->taille = 1;
     t->car=NULL;
     t->left=NULL;
     t->right=NULL;
@@ -109,14 +155,16 @@ void printAST(AST t)
     printAST(t->left);
     if (t->left==NULL) { 
     	if(t->boo == NULL && (t->ide == NULL)){ 
-	        char c[9] = {'+','*','/','<','>','=','!',';'};
-	        char c2[9] = {'+','*','-','/','<','>','=','!',';'};
-	        
-	        if(!strstr(t->val,"e-"))
-  			strtok(t->val,c2);
-  		else
-  			strtok(t->val,c);
-	    	printf(":%s: ",t->val);
+    		 if(strcmp(t->val,";")){
+			char c[9] = {'+','*','/','<','>','=','!',';'};
+			char c2[9] = {'+','*','-','/','<','>','=','!',';'};
+			
+			if(!strstr(t->val,"e-"))
+	  			strtok(t->val,c2);
+	  		else
+	  			strtok(t->val,c);
+		    	printf(":%s: ",t->val);
+		   }
 	}
 	else if (t->ide == NULL)
 		printf(":%s: ",t->boo); 
@@ -147,6 +195,7 @@ void printAST(AST t)
   }
 }
 
+//On extrait la variable d'une chaine de caractère suivi d'un "="
 char* chaine(char* c){
 	char* ch = (char*)malloc(strlen(c)*sizeof(char));
 	for(int i = 0; i<strlen(c);i++){
@@ -161,107 +210,228 @@ char* chaine(char* c){
 	return ch;
 }
 
-void codeExtension(AST t, char* file){
-	FILE* fichier = NULL;
-	fichier = fopen(file,"a+");
 
-    if (t->left!=NULL){ 
+/* postfix print an AST with a file
+
+On ouvre le fichier en écriture. On parcourt l'arbre en affichant le fils gauche puis droit puis la racine. Si le noeud courant est :
+- une feuille alors on écrit l'instruction CsteNb dans le fichier
+- un noeud qui ne possède qu'un fils on écrit l'instruction NegaNb
+- un noeud qui possède deux fils alors on va chercher à quelle opération il fait référence : '+' pour AddiNb, '*' pour MultNb et '-' pour SubiNb. 
+
+On ferme le fichier.
+
+*/ 
+void codeExtension(AST t, char* file){
+	
+	
+    if (t->left!=NULL){
+    	if(!strcmp(t->car,"Else")){
+	    	FILE* fichier = NULL;
+		fichier = fopen(file,"a+");
+	    	fprintf(fichier,"Jump %d \n",t->taille);
+	    	fclose(fichier);
+	}
     	codeExtension(t->left,file); 
+    	
     }
     if (t->right!=NULL){ 
+    	if(!strcmp(t->car,"If")){
+    	       FILE* fichier = NULL;
+	       fichier = fopen(file,"a+");
+	       fprintf(fichier,"ConJmp %d \n",t->taille);
+	       fclose(fichier);
+	} 
     	codeExtension(t->right,file);
     }
    
     if(t->left == NULL){
     	if(t->boo == NULL && (t->ide == NULL)){
-    		char c[9] = {'+','*','/','<','>','=','!',';'};
-	        char c2[9] = {'+','*','-','/','<','>','=','!',';'};
-	        
-	        if(!strstr(t->val,"e-"))
-  			strtok(t->val,c2);
-  		else
-  			strtok(t->val,c);
-  		fprintf(fichier,"CsteNb %s \n",t->val);
+    		if(strcmp(t->val,";")){
+	    		char c[9] = {'+','*','/','<','>','=','!',';'};
+			char c2[9] = {'+','*','-','/','<','>','=','!',';'};
+			
+			if(!strstr(t->val,"e-"))
+	  			strtok(t->val,c2);
+	  		else
+	  			strtok(t->val,c);
+	  		FILE* fichier = NULL;
+			fichier = fopen(file,"a+");
+	  		fprintf(fichier,"CsteNb %s \n",t->val);
+	  		fclose(fichier);
+	  	}
     	}
 	else if (t->ide == NULL){
-		if(strcmp(t->boo,"NaN"))
+		if(strcmp(t->boo,"NaN")){
+			FILE* fichier = NULL;
+	        	fichier = fopen(file,"a+");
 			fprintf(fichier,"CsteBo %s \n",t->boo);
+			fclose(fichier);
+		}
 	}
 	else if (t->boo == NULL) {
 		if(strstr(t->ide, "++")){
 			strtok(t->ide,"++");
+			FILE* fichier = NULL;
+	        	fichier = fopen(file,"a+");
 			fprintf(fichier,"GetVar %s\n",t->ide);
 			fprintf(fichier,"CstNb 1\n");
 			fprintf(fichier,"AddiNb\n");
 			fprintf(fichier,"SetVar %s\n", t->ide);
+			fclose(fichier);
 		}
-		else
+		else{
+			FILE* fichier = NULL;
+	        	fichier = fopen(file,"a+");
 			fprintf(fichier,"GetVar %s\n",t->ide); 
+			fclose(fichier);
+		}
 	} 	
     } 
-    
     else if (t->left != NULL && (t->right == NULL)){
-    	if(strcmp(t->car, "-") == 0)
+    	if(strcmp(t->car, "-") == 0){
+    		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
     		fprintf(fichier,"NegaNb \n");
-    	else if (strcmp(t->car, "!") == 0)
+    		fclose(fichier);
+    	}
+    	else if (strcmp(t->car, "!") == 0){
+    		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
     		fprintf(fichier,"Not \n");
+    		fclose(fichier);
+    	}
     	else if (!strcmp(t->car, "=") && t->ide != NULL) {
     		strtok(t->ide,"=");
-    		fprintf(fichier,"SetVar %s \n",t->ide); 
+    		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
+    		fprintf(fichier,"SetVar %s \n",t->ide);
+    		fclose(fichier); 
     	}
     } 
     else {
-    	if(!strcmp(t->car,"+"))
+    	if(!strcmp(t->car,"+")){
+    		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"AddiNb\n");
-	if(!strcmp(t->car,"*"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"*")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"MultNb\n");
-	if(!strcmp(t->car,"-"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"-")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"SubiNb\n");
-	if(!strcmp(t->car,"/"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"/")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"DiviNb\n");
-	if(!strcmp(t->car,"=="))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"==")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"Equals\n");
-	if(!strcmp(t->car,"!="))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"!=")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"NoEql\n");
-	if(!strcmp(t->car, ">="))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car, ">=")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"GrEqNb\n");
-	if(!strcmp(t->car,">"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,">")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"GrStNb\n");
-	if(!strcmp(t->car, "<="))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car, "<=")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"LoEqNb\n");
-	if(!strcmp(t->car,"<"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"<")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"LoStNb\n");
+		fclose(fichier);
+	}
     }
-    fclose(fichier);
+    
 }
 
 
-/* postfix print an AST*/  
+/* postfix print an AST without file
+
+On parcourt tout d'abord l'arbre en affichant le fils gauche puis droit puis la racine. Si le noeud courant est :
+- une feuille alors on affiche l'instruction CsteNb
+- un noeud qui ne possède qu'un fils on affiche l'instruction NegaNb
+- un noeud qui possède deux fils alors on va chercher à quelle opération il fait référence : '+' pour AddiNb, '*' pour MultNb et '-' pour SubiNb. 
+
+*/  
 void code(AST t)
 {	
-
+    
     if (t->left!=NULL){ 
-    	code(t->left); 
+    	//printf("car 2 %s \n",t->car);
+    	if(!strcmp(t->car,"Else")){
+    		t->taille = t->taille + 1 + t->left->taille;
+	    	printf("Jump %d \n",t->taille);
+	    	printf("*%d\n", t->taille);
+	}
+    	code(t->left);
     }
     if (t->right!=NULL){ 
+    	if(!strcmp(t->car,"If")){
+    		if(!strcmp(t->right->car, "IfElse")){
+    			t->taille = t->right->left->taille;
+		    	printf("ConJmp %d \n",t->taille); 
+		    	printf("---%d\n", t->taille);
+		}
+		else{
+	    		t->taille = t->taille + 1 + t->left->taille;
+		    	printf("ConJmp %d \n",t->taille); 
+		    	printf("*%d\n", t->taille);
+		}
+	}
     	code(t->right);
+    	
     }
+    
     if(t->left == NULL){
 
 	if(t->boo == NULL && (t->ide == NULL)){
-		char c[9] = {'+','*','/','<','>','=','!',';'};
-	        char c2[9] = {'+','*','-','/','<','>','=','!',';'};
-	        
-	        if(!strstr(t->val,"e-"))
-  			strtok(t->val,c2);
-  		else
-  			strtok(t->val,c);
-	    	printf("CsteNb %s \n",t->val);
+		if(strcmp(t->val,";")){
+			char c[9] = {'+','*','/','<','>','=','!',';'};
+			char c2[9] = {'+','*','-','/','<','>','=','!',';'};
+			
+			if(!strstr(t->val,"e-"))
+	  			strtok(t->val,c2);
+	  		else
+	  			strtok(t->val,c);
+		    	printf("CsteNb %s \n",t->val);
+		    	printf("%d\n", t->taille);
+		 }
 	}
 	    	
 	else if (t->ide == NULL ){
-		if(strcmp(t->boo,"NaN"))
+		if(strcmp(t->boo,"NaN")){
 			printf("CsteBo %s \n",t->boo); 
+			printf("%d\n", t->taille);
+		}
 	}
 	else if (t->boo == NULL )  {
 		
@@ -271,44 +441,91 @@ void code(AST t)
 			printf("CstNb 1\n");
 			printf("AddiNb\n");
 			printf("SetVar %s\n", t->ide);
+			printf("%d\n", t->taille);
 		}
-		else
+		else{
 			printf("GetVar %s \n",t->ide);
+			printf("%d\n", t->taille);
+		}
 	}
     } 	  
     else if (t->left != NULL && (t->right == NULL)){
-    	if(strcmp(t->car, "-") == 0)
+    	if(strcmp(t->car, "-") == 0){
     		printf("NegaNb \n");
-    	else if (strcmp(t->car, "!") == 0)
+    		t->taille = t->taille + t->left->taille;
+    		printf("%d\n", t->taille);
+    	}
+    	else if (strcmp(t->car, "!") == 0){
     		printf("Not \n");
+    		t->taille = t->taille + t->left->taille;
+    		printf("%d\n", t->taille);
+    	}
     	else if (!strcmp(t->car, "=") && t->ide != NULL) {
     		strtok(t->ide,"=");
     		printf("SetVar %s \n",t->ide); 
+    		t->taille = t->taille + t->left->taille;
+    		printf("*%d\n", t->taille);
     	}
     } 
-    else affichage(t);
+    else{ 
+    		affichage(t);
+    	
+    }
 }
 
+
+//fonction qui va déterminer l'opération pour la fonction code
 void affichage(AST t){
-	if(!strcmp(t->car,"+"))
+	if(!strcmp(t->car,"+")){
 		printf("AddiNb\n");
-	if(!strcmp(t->car,"*"))
+		t->taille = 1+t->left->taille + t->right->taille;
+		printf("%d\n", t->taille);
+	}
+	if(!strcmp(t->car,"*")){
 		printf("MultNb\n");
-	if(!strcmp(t->car,"-"))
+		t->taille = 1+t->left->taille + t->right->taille;
+		printf("%d\n", t->taille);
+	}
+	if(!strcmp(t->car,"-")){
 		printf("SubiNb\n");
-	if(!strcmp(t->car,"/"))
+		t->taille = 1+t->left->taille + t->right->taille;
+		printf("%d\n", t->taille);
+	}
+	if(!strcmp(t->car,"/")){
 		printf("DiviNb\n");
-	if(!strcmp(t->car,"=="))
+		t->taille = 1+t->left->taille + t->right->taille;
+		printf("%d\n", t->taille);
+	}
+	if(!strcmp(t->car,"==")){
 		printf("Equals\n");
-	if(!strcmp(t->car,"!="))
+		t->taille = 1+t->left->taille + t->right->taille;
+		printf("%d\n", t->taille);
+	}
+	if(!strcmp(t->car,"!=")){
 		printf("NoEql\n");
-	if(!strcmp(t->car, ">="))
+		t->taille = 1+t->left->taille + t->right->taille;
+		printf("%d\n", t->taille);
+	}
+	if(!strcmp(t->car, ">=")){
 		printf("GrEqNb\n");
-	if(!strcmp(t->car,">"))
+		t->taille = 1+t->left->taille + t->right->taille;
+		printf("%d\n", t->taille);
+	}
+	if(!strcmp(t->car,">")){
 		printf("GrStNb\n");
-	if(!strcmp(t->car, "<="))
+		t->taille = 1+t->left->taille + t->right->taille;
+		printf("%d\n", t->taille);
+	}
+	if(!strcmp(t->car, "<=")){
 		printf("LoEqNb\n");
-	if(!strcmp(t->car,"<"))
+		t->taille = 1+t->left->taille + t->right->taille;
+		printf("%d\n", t->taille);
+	}
+	if(!strcmp(t->car,"<")){
 		printf("LoStNb\n");
+		t->taille = 1+t->left->taille + t->right->taille;
+		printf("%d\n", t->taille);
+	}
+	
 }
 

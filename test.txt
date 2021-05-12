@@ -1,12 +1,46 @@
 //test des brakets
+
+//If(x==y);Else;
+//r=46;y=2e-3;If(r==y)y++;Elser=r-y;
+//If(c==y)y=x+0.1;Else{y++;}
+/*
+If(c==y)
+	y=x+0.1;
+Else{
+	y++;
+}*/
+
+If(x<=y)
+	If(c==y)
+		y=x+0.1;
+	Else
+		y++;
+Else 
+	y=-2;
+	
+//If(x<=y)If(c==y)y=x+0.1;Elsey++;Elsey=-2;
+	
+/*
+
 If(x<=y){
-	x=3e-3;
+	y=y5;
 	If(c==y)
 		y=x+0.1;
 	Else{
 		y++;
 	}
+	x=3e-3;
 } 
 Else 
 	y=-2;
+	*/
 
+/*
+If(x)
+	If(y)
+		y++;
+	Else
+		y=y-1;
+Else
+	x=x-1;
+*/

@@ -7,6 +7,7 @@ struct _tree {
   char* val;			/* float  for value */
   char* boo;
   char* ide;
+  int taille;
   struct _tree* left;    	/* used for unary node but NULL if leaf */
   struct _tree* right;   	/* NULL if unary node or leaf*/
 };
@@ -43,10 +44,10 @@ void freeAST(AST t);
 /* affichage du code assembleur dans un fichier .jsm */
 void codeExtension(AST t, char* file);
 
-/* print postfix */
+/* print postfix without file*/
 void code(AST t);
 
-/* affichage du code assembleur */
+/* fonction qui va déterminer l'opération pour la fonction code */ 
 void affichage(AST t);
 
 /* print an AST*/

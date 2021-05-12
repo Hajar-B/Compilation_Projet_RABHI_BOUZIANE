@@ -16,6 +16,7 @@ int main(int argc, char *argv[]){
   FILE* tmp;
   AST t; 				/* &t allows to modifie the tree */
   
+  // Si l'on a un fichier en argument
   if( argc == 2){
 	  if((tmp = fopen(argv[1],"r")) != NULL){
 		  yyin = tmp;
@@ -28,15 +29,16 @@ int main(int argc, char *argv[]){
 	    if (t->left!=NULL) printf("Root symbol:: %s\n", t->car);	/* check if car at root */
 	    printAST(t); printf("\n");
 	    
-	    
-	    char* nomFichier = strtok(argv[1],"."); 
+	    //On récupère le nom du fichier sans l'extension 
+	    char* nomFichier = strtok(argv[1],".");
+	    //On lui ajoute l'extension .jsm 
 	    char* nomExtension = strcat(nomFichier,".jsm");
 	    printf("%s\n",nomExtension);
 	    //suppression du fichier s'il existe deja
 	    remove(nomExtension);
-	    //code assembleur
-	    
+	    //On crée le code assembleur qui sera écrit dans le nouveau fichier	    
 	    codeExtension(t, nomExtension); printf("\n");
+	    //On ajoute à la fin du code : Halt 
 	    FILE* fichier = NULL;
 	    fichier = fopen(nomExtension,"a+");
 	    fprintf(fichier,"Halt\n");
@@ -46,6 +48,7 @@ int main(int argc, char *argv[]){
     	  }
 	  fclose(tmp);
    }
+   //Si l'on souhaite écrire l'expression sur le terminal
    else{
    	printf("Entrez votre expression : ");
    	char buff[50];
@@ -58,8 +61,10 @@ int main(int argc, char *argv[]){
 	    /* print the obtained tree */
 	    if (t->left!=NULL) printf("Root symbol:: %s\n", t->car);	/* check if car at root */
 	    printAST(t); printf("\n");
-	    //code assembleur
-	    code(t); printf("Halt\n");	
+	    //On affiche le code assembleur sur le terminal
+	    code(t); 
+	    //On ajoute à la fin du code : Halt 
+	    printf("Halt\n");	
 	    freeAST(t);
 	}
    }

@@ -51,29 +51,17 @@ extern int yydebug;
   {
     NUMBER = 258,
     BOOLEAN = 259,
-<<<<<<< HEAD
-    IDENT = 260,
-    NAN = 261,
+    NAN = 260,
+    IDENT = 261,
     PT_VIRG = 262,
     EQUALS = 263,
     NOTEQL = 264,
     GREQ = 265,
     LOEQ = 266,
     INCRE = 267,
-    MOINSU = 268
-=======
-    NAN = 260,
-    PT_VIRG = 261,
-    EQUALS = 262,
-    NOTEQL = 263,
-    GREQ = 264,
-    LOEQ = 265,
-    INCRE = 266,
-    IDENT = 267,
     IF = 268,
     ELSE = 269,
     MOINSU = 270
->>>>>>> parser
   };
 #endif
 
@@ -88,7 +76,7 @@ union YYSTYPE
   char* boo;
   char* ide;
 
-#line 78 "parseur.tab.h"
+#line 80 "parseur.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
