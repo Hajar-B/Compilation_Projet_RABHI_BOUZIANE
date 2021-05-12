@@ -15,7 +15,6 @@ AST newBinaryAST(char* car, AST left, AST right)
     t->right=right;
     if(t->right != NULL)
     	if(!strcmp(t->car,"If") && strcmp(t->car,"IfElse")){
-	    	printf("car %s\n",t->car);
 	    	t->taille = 2 + right->taille;
     	}
    	else
