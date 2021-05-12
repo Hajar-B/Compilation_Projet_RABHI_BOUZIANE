@@ -184,15 +184,27 @@ char* chaine(char* c){
 	return ch;
 }
 
-void codeExtension(AST t, char* file){
-	FILE* fichier = NULL;
-	fichier = fopen(file,"a+");
 
+void codeExtension(AST t, char* file){
+	
+	
     if (t->left!=NULL){
+    	if(!strcmp(t->car,"Else")){
+	    	FILE* fichier = NULL;
+		fichier = fopen(file,"a+");
+	    	fprintf(fichier,"Jump %d \n",t->taille-1);
+	    	fclose(fichier);
+	}
     	codeExtension(t->left,file); 
     	
     }
     if (t->right!=NULL){ 
+    	if(!strcmp(t->car,"If")){
+    	       FILE* fichier = NULL;
+	       fichier = fopen(file,"a+");
+	       fprintf(fichier,"ConJmp %d \n",t->taille-1);
+	       fclose(fichier);
+	} 
     	codeExtension(t->right,file);
     }
    
@@ -205,58 +217,123 @@ void codeExtension(AST t, char* file){
   			strtok(t->val,c2);
   		else
   			strtok(t->val,c);
+  		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
   		fprintf(fichier,"CsteNb %s \n",t->val);
+  		fclose(fichier);
     	}
 	else if (t->ide == NULL){
-		if(strcmp(t->boo,"NaN"))
+		if(strcmp(t->boo,"NaN")){
+			FILE* fichier = NULL;
+	        	fichier = fopen(file,"a+");
 			fprintf(fichier,"CsteBo %s \n",t->boo);
+			fclose(fichier);
+		}
 	}
 	else if (t->boo == NULL) {
 		if(strstr(t->ide, "++")){
 			strtok(t->ide,"++");
+			FILE* fichier = NULL;
+	        	fichier = fopen(file,"a+");
 			fprintf(fichier,"GetVar %s\n",t->ide);
 			fprintf(fichier,"CstNb 1\n");
 			fprintf(fichier,"AddiNb\n");
 			fprintf(fichier,"SetVar %s\n", t->ide);
+			fclose(fichier);
 		}
-		else
+		else{
+			FILE* fichier = NULL;
+	        	fichier = fopen(file,"a+");
 			fprintf(fichier,"GetVar %s\n",t->ide); 
+			fclose(fichier);
+		}
 	} 	
     } 
     
     else if (t->left != NULL && (t->right == NULL)){
-    	if(strcmp(t->car, "-") == 0)
+    	if(strcmp(t->car, "-") == 0){
+    		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
     		fprintf(fichier,"NegaNb \n");
-    	else if (strcmp(t->car, "!") == 0)
+    		fclose(fichier);
+    	}
+    	else if (strcmp(t->car, "!") == 0){
+    		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
     		fprintf(fichier,"Not \n");
+    		fclose(fichier);
+    	}
     	else if (!strcmp(t->car, "=") && t->ide != NULL) {
     		strtok(t->ide,"=");
-    		fprintf(fichier,"SetVar %s \n",t->ide); 
+    		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
+    		fprintf(fichier,"SetVar %s \n",t->ide);
+    		fclose(fichier); 
     	}
     } 
     else {
-    	if(!strcmp(t->car,"+"))
+    	if(!strcmp(t->car,"+")){
+    		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"AddiNb\n");
-	if(!strcmp(t->car,"*"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"*")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"MultNb\n");
-	if(!strcmp(t->car,"-"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"-")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"SubiNb\n");
-	if(!strcmp(t->car,"/"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"/")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"DiviNb\n");
-	if(!strcmp(t->car,"=="))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"==")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"Equals\n");
-	if(!strcmp(t->car,"!="))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"!=")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"NoEql\n");
-	if(!strcmp(t->car, ">="))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car, ">=")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"GrEqNb\n");
-	if(!strcmp(t->car,">"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,">")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"GrStNb\n");
-	if(!strcmp(t->car, "<="))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car, "<=")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"LoEqNb\n");
-	if(!strcmp(t->car,"<"))
+		fclose(fichier);
+	}
+	if(!strcmp(t->car,"<")){
+		FILE* fichier = NULL;
+	        fichier = fopen(file,"a+");
 		fprintf(fichier,"LoStNb\n");
+		fclose(fichier);
+	}
     }
-    fclose(fichier);
+    
 }
 
 

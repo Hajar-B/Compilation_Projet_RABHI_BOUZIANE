@@ -27,7 +27,7 @@ int main(int argc, char *argv[]){
 	    /* print the obtained tree */
 	    if (t->left!=NULL) printf("Root symbol:: %s\n", t->car);	/* check if car at root */
 	    printAST(t); printf("\n");
-	    
+	   	
 	    
 	    char* nomFichier = strtok(argv[1],"."); 
 	    char* nomExtension = strcat(nomFichier,".jsm");

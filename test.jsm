@@ -1,17 +1,19 @@
 GetVar x
-CsteBo False 
-car = 
-ConJmp 1 
+ConJmp 12 
+GetVar y
+ConJmp 5 
+GetVar y
+CstNb 1
+AddiNb
+SetVar y
+Jump 4 
+GetVar y
+CsteNb 1 
+SubiNb
 SetVar y 
-car If 
-ConJmp 3 
+Jump 4 
 GetVar x
-car = 
-ConJmp 1 
-SetVar y 
-car Else 
-ConJmp 2 
-Jump 2 
-car IfElse 
-ConJmp 7 
+CsteNb 1 
+SubiNb
+SetVar x 
 Halt

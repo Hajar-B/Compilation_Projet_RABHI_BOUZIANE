@@ -1,4 +1,5 @@
-If(x)y=False;Elsey=x;
+If(x)If(y)y++;Elsey=y-1;Elsex=x-1;
+//If(x)y=False;Elsey=x;
 /*If(x<=y) 
 	x=3e-3; 
 Else 
