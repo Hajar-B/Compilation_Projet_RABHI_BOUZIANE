@@ -8,10 +8,13 @@
 
 %%
 
+
 ([a-z,A-Z,0-9,_]*|"0"?("."0*)?)"/"((".")?"0"|"0"("."0*)) { printf("lex::NAN %s\n",yytext); yylval.boo=yytext; return NAN; }
 (0|[1-9][0-9]*)(("."[0-9]*)?("e"-?[0-9]+)?)|("."[0-9]+)("e"-?[0-9]+)? { printf("lex::NUMBER %s\n",yytext); yylval.numf=yytext; return NUMBER; }
 [a-z][0-9,A-Z,a-z,_]* { printf("lex::IDENT %s\n",yytext);  yylval.ide=yytext; return IDENT; }
 "True"|"False" { printf("lex::BOOLEAN %s\n",yytext); yylval.boo=yytext; return BOOLEAN; }
+"If" 		{ printf("lex::IF %s\n",yytext); return IF; }
+"Else" 	{ printf("lex::ELSE %s\n",yytext); return ELSE; }
 ==		{ printf("lex::EQUALS %s\n",yytext); return EQUALS; }
 !=		{ printf("lex::NOTEQL %s\n",yytext); return NOTEQL; }
 >=		{ printf("lex::GREQ %s\n",yytext); return GREQ; }
