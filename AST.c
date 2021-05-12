@@ -14,7 +14,12 @@ AST newBinaryAST(char* car, AST left, AST right)
     t->left=left;
     t->right=right;
     if(t->right != NULL)
-   	 t->taille = 1 + left->taille + right->taille;	 
+    	if(!strcmp(t->car,"If") && strcmp(t->car,"IfElse")){
+	    	printf("car %s\n",t->car);
+	    	t->taille = 2 + right->taille;
+    	}
+   	else
+   		t->taille = 1 + left->taille + right->taille;	 
     else 
     	t->taille = 1 + left->taille;
    
@@ -22,6 +27,10 @@ AST newBinaryAST(char* car, AST left, AST right)
    	 t->taille -= 1; 
     else if(t->left != NULL && t->left->car && !strcmp(t->left->car,"IfElse"))
     	 t->taille -= 1;
+    /*if(!strcmp(t->car,"If") && strcmp(t->car,"IfElse")){
+    	printf("car %s\n",t->car);
+    	t->taille = 2 + right->taille;
+    }*/
     
     	 
   } else printf("MALLOC! ");
@@ -104,7 +113,6 @@ AST newLeafASTide(char* chaine){
     char* ch;
     ch = strtok(chaine,c);
     t->ide=ch;
-    
     t->taille = 1;
     t->car=NULL;
     t->left=NULL;
