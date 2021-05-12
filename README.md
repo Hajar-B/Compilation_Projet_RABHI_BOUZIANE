@@ -53,7 +53,7 @@ on a également ajouté un champ *taille* à la structure de notre AST qui fera 
 - Une autre fonction newLeafASTide(char* chaine) qui va créer la feuille qui contiendra une variable;
 - newUnaryASTide(char* ide, char* incre) a ensuite été ajouté. Elle permet de créer une feuille qui sera composée de l'opération "++" ainsi que de la variable qu'elle incrémente.
 - Pour toutes fonctions qui vont générer des feuilles on va initialiser la taille à 1. Il y a une spécificité pour l'opération d'incrémentation, on doit lui ajouter 4 lignes.
-- Pour les fonctions qui génèrent des arbres (avec un ou deux fils) on va initialiser la taille à : 1 + taille du fils gauche + taille du fils droit. Si l'un deux est NULL on lui donne la taille 0 dans cette formule. Lorsqu'on passe par un noeud qui est un 'IfElse' on décrémente de 1 car lorsqu'on crée un 'if_then_else' on crée un arbre bianire 'IfElse' qui est lui-même composé d'un arbre binaire 'If' et et d'un arbre unaire 'Else' ce qui ajoute 3 à la taille.
+- Pour les fonctions qui génèrent des arbres (avec un ou deux fils) on va initialiser la taille à : 1 + taille du fils gauche + taille du fils droit. Si l'un deux est NULL on lui donne la taille 0 dans cette formule. Lorsqu'on passe par un noeud qui est un 'If' on initialise la taille à : 2 + la taille de son fils droit. De plus lorsqu'on passe par le noeud qui contient 'IfElse' on décrémente de 1 car lorsqu'on crée un 'if_then_else' on crée un arbre binaire 'IfElse' qui est lui-même composé d'un arbre binaire 'If' et et d'un arbre unaire 'Else' ce qui fausse la taille de 1.
 
 5. **main.c**:
 - programme exécutable qui va parser le contenu d'un fichier.
