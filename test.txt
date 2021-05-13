@@ -2,7 +2,9 @@
 
 //If(x==y);Else;
 //r=46;y=2e-3;If(r==y)y++;Elser=r-y;
-//If(c==y)y=x+0.1;Else{y++;}
+//If(c==y)y=x+0.1;Elsey++;
+//If(c==y)y=x+0.1*l/345;Elsey++;
+If(c==y);Elsey++;
 /*
 If(c==y)
 	y=x+0.1;

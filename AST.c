@@ -6,6 +6,7 @@
 /* create an AST from a root value and two AST sons */
 AST newBinaryAST(char* car, AST left, AST right)
 {
+
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
   if (t!=NULL){	/* malloc ok */
     t->car=car;
@@ -13,6 +14,42 @@ AST newBinaryAST(char* car, AST left, AST right)
     t->ide = NULL;
     t->left=left;
     t->right=right;
+    
+    /*if(left && right && !strcmp(car)
+    	t->taille = 1 + left->taille + right->taille;*/
+    	/*
+    if(left && right && !strcmp(car, "IfElse")){
+    	if(
+    	t->taille = 1 + left->right->taille + right->taille;
+    }*/
+    
+    if(left && right && !strcmp(car, "If")){
+    	printf("%s\n", car);
+    	if(right->car && !strcmp(right->car,"IfElse"))
+    		t->taille = 1+ 2 + right->left->left->taille + right->left->right->taille + right->right->taille;
+    	else
+    		t->taille = 1 + right->taille;		
+    }
+    else if(left && !right && !strcmp(car, "Else")){
+    	printf("%s\n", car);
+    	if(left->car && !strcmp(left->car,";"))
+    		t->taille = 0;
+    	if(left->car && !strcmp(left->car,"IfElse"))
+    		t->taille = 1+ 2 + left->left->left->taille + left->left->right->taille + left->right->taille;	
+    	if(left->car && !strcmp(left->car,";"))
+    		t->taille = 0;	
+    }
+    else if(left && !right){
+    	/*if(left->car && !strcmp(left->car,";"))
+    		t->taille = 0;	
+    	else */
+    		t->taille = 1 + left->taille;
+    }
+    else {
+    	t->taille = 1 + left->taille + right->taille;
+    	
+    }
+    	
     /*
     if(!t->left && !t->right)
     	t->taille = 1;
@@ -31,6 +68,12 @@ AST newBinaryAST(char* car, AST left, AST right)
 }
 
 
+/*printf("--car = %s\n",car);
+        printf("left->right->car = %s\n",left->right->car);
+    	if(!strcmp(left->right->car, "IfElse")){
+    		t->taille = 2 + left->right->left->left->taille + left->right->left->right->taille + left->right->right->taille;
+    	}
+    	else*/
 
 
  /*
@@ -67,7 +110,7 @@ AST newBinaryASTide(char* car, char* ide, AST son)
     if(son != NULL)
    	 t->taille = 1 + son->taille;
     else{ 
-    	if(!strcmp(car,"++"))
+    	if(ide && !strcmp(car,"++"))
     		t->taille = 3;
     	else
     		t->taille = 1;
@@ -85,17 +128,21 @@ AST newBinaryASTide(char* car, char* ide, AST son)
 /* create an AST leaf from a value */
 AST newLeafAST(char* val)
 {
+  
   AST t=(struct _tree*) malloc(sizeof(struct _tree));
   if (t!=NULL){	/* malloc ok */  
     t->val=chaine(val);
     t->car = NULL;
-    if(strcmp(t->val,";"))
+    if(val && strcmp(t->val,";"))
         t->taille = 1;
+    else
+    	t->taille = 0;
     t->boo = NULL;
     t->ide = NULL;
     t->left=NULL;
     t->right=NULL;
   } else printf("MALLOC! ");
+  
   return t;
 }
 
@@ -388,24 +435,30 @@ void code(AST t)
     if (t->left!=NULL){ 
     	//printf("car 2 %s \n",t->car);
     	if(!strcmp(t->car,"Else")){
-    		t->taille = t->taille + 1 + t->left->taille;
+    		//t->taille = t->taille + 1 + t->left->taille;
 	    	printf("Jump %d \n",t->taille);
-	    	printf("*%d\n", t->taille);
+	    	printf("%d\n", t->taille);
 	}
     	code(t->left);
     }
     if (t->right!=NULL){ 
     	if(!strcmp(t->car,"If")){
-    		if(!strcmp(t->right->car, "IfElse")){
-    			t->taille = t->right->left->taille;
+    		printf("ConJmp %d \n",t->taille); 
+		printf("*%d\n", t->taille);
+    	/*
+    	//	if(!strcmp(t->right->car, "IfElse")){
+    			//t->taille = t->right->left->taille;
+    			//t->taille = 2 + t->taille + t->right->left->taille + t->right->right->taille;
+    			//printf("***%s\n",t->right->left->car);
+    			//printf("***%s\n",t->right->right->car);
 		    	printf("ConJmp %d \n",t->taille); 
-		    	printf("---%d\n", t->taille);
+		    	printf("--%d\n", t->taille);
 		}
 		else{
-	    		t->taille = t->taille + 1 + t->left->taille;
+	    		//t->taille = t->taille + 1 + t->left->taille;
 		    	printf("ConJmp %d \n",t->taille); 
 		    	printf("*%d\n", t->taille);
-		}
+		}*/
 	}
     	code(t->right);
     	
@@ -452,19 +505,19 @@ void code(AST t)
     else if (t->left != NULL && (t->right == NULL)){
     	if(strcmp(t->car, "-") == 0){
     		printf("NegaNb \n");
-    		t->taille = t->taille + t->left->taille;
+    		//t->taille = t->taille + t->left->taille;
     		printf("%d\n", t->taille);
     	}
     	else if (strcmp(t->car, "!") == 0){
     		printf("Not \n");
-    		t->taille = t->taille + t->left->taille;
+    		//t->taille = t->taille + t->left->taille;
     		printf("%d\n", t->taille);
     	}
     	else if (!strcmp(t->car, "=") && t->ide != NULL) {
     		strtok(t->ide,"=");
     		printf("SetVar %s \n",t->ide); 
-    		t->taille = t->taille + t->left->taille;
-    		printf("*%d\n", t->taille);
+    		//t->taille = t->taille + t->left->taille;
+    		printf("%d\n", t->taille);
     	}
     } 
     else{ 
@@ -478,52 +531,52 @@ void code(AST t)
 void affichage(AST t){
 	if(!strcmp(t->car,"+")){
 		printf("AddiNb\n");
-		t->taille = 1+t->left->taille + t->right->taille;
+		//t->taille = 1+t->left->taille + t->right->taille;
 		printf("%d\n", t->taille);
 	}
 	if(!strcmp(t->car,"*")){
 		printf("MultNb\n");
-		t->taille = 1+t->left->taille + t->right->taille;
+		//t->taille = 1+t->left->taille + t->right->taille;
 		printf("%d\n", t->taille);
 	}
 	if(!strcmp(t->car,"-")){
 		printf("SubiNb\n");
-		t->taille = 1+t->left->taille + t->right->taille;
+		//t->taille = 1+t->left->taille + t->right->taille;
 		printf("%d\n", t->taille);
 	}
 	if(!strcmp(t->car,"/")){
 		printf("DiviNb\n");
-		t->taille = 1+t->left->taille + t->right->taille;
+		//t->taille = 1+t->left->taille + t->right->taille;
 		printf("%d\n", t->taille);
 	}
 	if(!strcmp(t->car,"==")){
 		printf("Equals\n");
-		t->taille = 1+t->left->taille + t->right->taille;
+		//t->taille = 1+t->left->taille + t->right->taille;
 		printf("%d\n", t->taille);
 	}
 	if(!strcmp(t->car,"!=")){
 		printf("NoEql\n");
-		t->taille = 1+t->left->taille + t->right->taille;
+		//t->taille = 1+t->left->taille + t->right->taille;
 		printf("%d\n", t->taille);
 	}
 	if(!strcmp(t->car, ">=")){
 		printf("GrEqNb\n");
-		t->taille = 1+t->left->taille + t->right->taille;
+		//t->taille = 1+t->left->taille + t->right->taille;
 		printf("%d\n", t->taille);
 	}
 	if(!strcmp(t->car,">")){
 		printf("GrStNb\n");
-		t->taille = 1+t->left->taille + t->right->taille;
+		//t->taille = 1+t->left->taille + t->right->taille;
 		printf("%d\n", t->taille);
 	}
 	if(!strcmp(t->car, "<=")){
 		printf("LoEqNb\n");
-		t->taille = 1+t->left->taille + t->right->taille;
+		//t->taille = 1+t->left->taille + t->right->taille;
 		printf("%d\n", t->taille);
 	}
 	if(!strcmp(t->car,"<")){
 		printf("LoStNb\n");
-		t->taille = 1+t->left->taille + t->right->taille;
+		//t->taille = 1+t->left->taille + t->right->taille;
 		printf("%d\n", t->taille);
 	}
 	
