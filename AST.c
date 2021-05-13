@@ -23,32 +23,28 @@ AST newBinaryAST(char* car, AST left, AST right)
     	t->taille = 1 + left->right->taille + right->taille;
     }*/
     
-    if(left && right && !strcmp(car, "If")){
+     if(left && right && !strcmp(car, "If")){
     	printf("%s\n", car);
     	if(right->car && !strcmp(right->car,"IfElse"))
     		t->taille = 1+ 2 + right->left->left->taille + right->left->right->taille + right->right->taille;
-    	else
-    		t->taille = 1 + right->taille;		
+    	else{
+    		printf("1 %d\n", right->taille);
+    		t->taille = 1 + right->taille;
+    	}		
     }
-    else if(left && !right && !strcmp(car, "Else")){
-    	printf("%s\n", car);
-    	if(left->car && !strcmp(left->car,";"))
-    		t->taille = 0;
-    	if(left->car && !strcmp(left->car,"IfElse"))
+    /*else if(left && !right && !strcmp(car, "Else")){
+    	/*if(left->car && !strcmp(left->car,"IfElse"))
     		t->taille = 1+ 2 + left->left->left->taille + left->left->right->taille + left->right->taille;	
-    	if(left->car && !strcmp(left->car,";"))
-    		t->taille = 0;	
     }
     else if(left && !right){
-    	/*if(left->car && !strcmp(left->car,";"))
-    		t->taille = 0;	
-    	else */
     		t->taille = 1 + left->taille;
-    }
+    }*/
     else {
+    	printf("2 %d %d\n",left->taille, right->taille);
     	t->taille = 1 + left->taille + right->taille;
     	
     }
+    	
     	
     /*
     if(!t->left && !t->right)
